@@ -50,3 +50,6 @@ build/
 
 ### Local Configuration ###
 .env
+
+### macOS Finder stuff ###
+.DS_Store
