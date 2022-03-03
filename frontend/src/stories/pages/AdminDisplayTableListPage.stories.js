@@ -4,7 +4,7 @@ import AdminDisplayTableListPage from "main/pages/AdminDisplayTableListPage";
 
 export default {
     title: 'pages/AdminDisplayTableListPage',
-    component: AdminDisplayTable
+    component: AdminDisplayTableListPage
 };
 
 const Template = () => <AdminDisplayTableListPage />;
