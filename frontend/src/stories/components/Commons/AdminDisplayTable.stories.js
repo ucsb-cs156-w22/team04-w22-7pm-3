@@ -4,7 +4,7 @@ import AdminDisplayTable from "main/components/Commons/AdminDisplayTable";
 import { adminDisplayFixtures } from 'fixtures/adminDisplayTableFixtures';
 
 export default {
-    title: 'components/Commons/AdminDisplayTableTable',
+    title: 'components/Commons/AdminDisplayTable',
     component: AdminDisplayTable
 };
 
