@@ -79,6 +79,7 @@ public class CommonsController extends ApiController {
             .milkPrice(params.getMilkPrice())
             .startingBalance(params.getStartingBalance())
             .startDate(params.getStartDate())
+            .endDate(params.getEndDate())
             .build();
     Commons savedCommons = commonsRepository.save(c);
     String body = mapper.writeValueAsString(savedCommons);

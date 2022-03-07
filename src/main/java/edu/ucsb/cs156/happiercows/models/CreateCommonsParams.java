@@ -27,4 +27,6 @@ public class CreateCommonsParams {
   private double startingBalance;
   @DateTimeFormat
   private Date startDate;
+  @DateTimeFormat
+  private Date endDate;
 }

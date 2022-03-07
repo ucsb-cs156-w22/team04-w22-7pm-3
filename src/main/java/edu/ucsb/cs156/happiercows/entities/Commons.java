@@ -27,6 +27,7 @@ public class Commons {
   private double milkPrice;
   private double startingBalance;
   private Date startDate;
+  private Date endDate;
 
   @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
   @JoinTable(name = "user_commons", 
