@@ -1,7 +1,7 @@
 import React from 'react';
 
 import AdminDisplayTable from "main/components/Commons/AdminDisplayTable";
-import { adminDisplayFixtures } from 'fixtures/adminDisplayTableFixtures';
+import adminDisplayFixtures from 'fixtures/adminDisplayFixtures';
 
 export default {
     title: 'components/Commons/AdminDisplayTable',
