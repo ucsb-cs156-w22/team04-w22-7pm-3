@@ -1,7 +1,7 @@
 import React from "react";
 import OurTable from "main/components/OurTable";
 
-export default function AdminDisplayTable({ admins }) {
+export default function AdminDisplayTable({ admins, currentUser }) {
     
     // Stryker disable ArrayDeclaration : [columns] and [students] are performance optimization; mutation preserves correctness
     const memoizedColumns = React.useMemo(() => 
@@ -31,8 +31,8 @@ export default function AdminDisplayTable({ admins }) {
                 accessor: "date",
             }
         ], 
-    []);
-    const memoizedDates = React.useMemo(() => admins, [admins]);
+    );
+    const memoizedDates = React.useMemo(() => admins);
     // Stryker enable ArrayDeclaration
 
     return <OurTable

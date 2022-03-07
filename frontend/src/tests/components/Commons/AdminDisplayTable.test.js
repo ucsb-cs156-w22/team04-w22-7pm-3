@@ -1,6 +1,6 @@
 
 import { fireEvent, render, waitFor } from "@testing-library/react";
-import { adminDisplayFixtures } from "fixtures/adminDisplayFixtures";
+import  adminDisplayFixtures  from "fixtures/adminDisplayFixtures";
 import AdminDisplayTable from "main/components/Commons/AdminDisplayTable"
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
@@ -9,14 +9,14 @@ import { currentUserFixtures } from "fixtures/currentUserFixtures";
 
 describe("AdminDsplayTable tests", () => {
   const queryClient = new QueryClient();
-  /* 
+  
   test("renders without crashing for empty table with user not logged in", () => {
     const currentUser = null;
 
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
-          <AdminDisplayTable adminDisplays={[]} currentUser={currentUser} />
+          <AdminDisplayTable admins={[]} currentUser={currentUser} />
         </MemoryRouter>
       </QueryClientProvider>
 
@@ -29,27 +29,27 @@ describe("AdminDsplayTable tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
-          <AdminDisplayTable adminDisplays={[]} currentUser={currentUser} />
+          <AdminDisplayTable admins={[]} currentUser={currentUser} />
         </MemoryRouter>
       </QueryClientProvider>
 
     );
   });
   
-*/
+
   test("renders without crashing for empty table for admin", () => {
     const currentUser = currentUserFixtures.adminUser;
 
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
-          <AdminDisplayTable adminDisplays={[]} currentUser={currentUser} />
+          <AdminDisplayTable admins={[]} currentUser={currentUser} />
         </MemoryRouter>
       </QueryClientProvider>
 
     );
   });
-  /*
+  
   test("Has the expected column headers and content for adminUser", () => {
 
     const currentUser = currentUserFixtures.adminUser;
@@ -57,7 +57,7 @@ describe("AdminDsplayTable tests", () => {
     const { getByText, getByTestId } = render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
-          <AdminDisplayTable adminDisplays={adminDisplayFixtures.threeAdmins} currentUser={currentUser} />
+          <AdminDisplayTable admins={adminDisplayFixtures.threeAdmins} currentUser={currentUser} />
         </MemoryRouter>
       </QueryClientProvider>
 
@@ -85,6 +85,6 @@ describe("AdminDsplayTable tests", () => {
     expect(getByTestId(`${testId}-cell-row-2-col-commons_name`)).toHaveTextContent("Vicky");
 
   });
-  */
+  
 });
 
