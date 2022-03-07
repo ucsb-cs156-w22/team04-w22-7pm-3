@@ -88,7 +88,7 @@ export default function CreateCommonsForm(props) {
             valueAsDate: true,
             validate: {
               isPresent: (v) => !isNaN(v) || "Start date is required",
-            },
+            },            
           })}
         />
         <Form.Control.Feedback type="invalid">
