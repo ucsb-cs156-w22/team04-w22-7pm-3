@@ -18,7 +18,7 @@ const FarmStats = ({userCommons}) => {
                 [ADD PIC HERE] 
             </Card.Text>
             <Card.Text>
-                Cow Health: {userCommons?.cowHealth}%
+                Cow Health: {userCommons?.avgCowHealth}%
             </Card.Text>
         </Card.Body>
         </Card>
