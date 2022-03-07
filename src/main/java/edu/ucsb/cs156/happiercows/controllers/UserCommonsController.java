@@ -57,4 +57,25 @@ public class UserCommonsController extends ApiController {
     return userCommons;
   }
 
+  @ApiOperation(value = "Decrement cows for current user")
+  @PreAuthorize("hasRole('ROLE_USER')")
+  @PutMapping("/forcurrentuser")
+  public ResponseEntity<String> decrementCows(
+      @ApiParam("commonsId") @RequestParam Long commonsId) throws JsonProcessingException {
+
+      User u = getCurrentUser().getUser();
+      Long userId = u.getId();
+      UserCommons userCommons = userCommonsRepository.findByCommonsIdAndUserId(commonsId, userId)
+          .orElseThrow(
+              () -> new EntityNotFoundException(UserCommons.class, "commonsId", commonsId, "userId", userId));
+      
+      if (userCommons.getNumCows() >= 0) {
+        userCommons.setNumCows(numCows - 1);
+      }
+      else {
+        return ResponseEntity.ok().body(String.format("Error - numCows is less than 0"));
+      }
+      return ResponseEntity.ok().body(String.format("Cow count decremented"));
+  }
+
 }
