@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Builder;
 import lombok.AccessLevel;
 
+import java.util.Date;
+import org.springframework.format.annotation.DateTimeFormat;
+
 
 import org.springframework.security.core.GrantedAuthority;
 
@@ -22,4 +25,6 @@ public class CreateCommonsParams {
   private double cowPrice;
   private double milkPrice;
   private double startingBalance;
+  @DateTimeFormat
+  private Date startDate;
 }
