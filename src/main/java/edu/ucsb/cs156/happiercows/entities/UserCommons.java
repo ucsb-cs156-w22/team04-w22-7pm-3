@@ -29,7 +29,7 @@ public class UserCommons {
   private int totalWealth;
   private double avgCowHealth;
 
-  @Column(name="user_id")
+  //@Column(name="user_id")
   private int numCows;
 
 }
