@@ -25,8 +25,28 @@ export default function PlayPage() {
         params: {
           commonsId: commonsId
         }
+      },
+      {
+        method: "PUT",
+        url: "/api/usercommons/forcurrentuser",
+        params: {
+          numCows: numCows
+        }
       }
     );
+
+    // const { data: userCommons, error: userCommonsError, status: userCommonsStatus } =
+    // useBackend(
+    //   // Stryker disable next-line all : don't test internal caching of React Query
+    //   [`/api/usercommons/forcurrentuser?commonsId=${commonsId}`],
+    //   {  // Stryker disable next-line all : GET is the default, so changing this to "" doesn't introduce a bug
+    //     method: "PUT",
+    //     url: "/api/usercommons/forcurrentuser",
+    //     params: {
+    //       numCows: numCows
+    //     }
+    //   }
+    // );
 
   const { data: commons, error: commonsError, status: commonsStatus } =
     useBackend(
