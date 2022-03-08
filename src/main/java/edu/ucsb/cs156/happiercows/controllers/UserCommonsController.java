@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.ucsb.cs156.happiercows.repositories.UserCommonsRepository;
@@ -18,6 +19,8 @@ import edu.ucsb.cs156.happiercows.errors.EntityNotFoundException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+
+import org.springframework.http.ResponseEntity;
 
 @Api(description = "User Commons")
 @RequestMapping("/api/usercommons")
@@ -61,16 +64,19 @@ public class UserCommonsController extends ApiController {
   @PreAuthorize("hasRole('ROLE_USER')")
   @PutMapping("/forcurrentuser")
   public ResponseEntity<String> decrementCows(
-      @ApiParam("commonsId") @RequestParam Long commonsId) throws JsonProcessingException {
+      @ApiParam("commonsId") @RequestParam Long commonsId,
+      @ApiParam("numCows") @RequestParam int numCows) throws JsonProcessingException {
+      
 
       User u = getCurrentUser().getUser();
       Long userId = u.getId();
       UserCommons userCommons = userCommonsRepository.findByCommonsIdAndUserId(commonsId, userId)
-          .orElseThrow(
-              () -> new EntityNotFoundException(UserCommons.class, "commonsId", commonsId, "userId", userId));
-      
+        .orElseThrow(
+            () -> new EntityNotFoundException(UserCommons.class, "commonsId", commonsId, "userId", userId));
+
       if (userCommons.getNumCows() >= 0) {
         userCommons.setNumCows(numCows - 1);
+        userCommonsRepository.save(userCommons);
       }
       else {
         return ResponseEntity.ok().body(String.format("Error - numCows is less than 0"));
