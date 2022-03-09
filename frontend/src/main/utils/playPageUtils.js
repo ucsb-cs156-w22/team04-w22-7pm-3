@@ -10,13 +10,3 @@ export function onIncrementSuccess(message) {
     console.log(message);
     toast(message);
 }
-
-export function cellToAxiosParamsDecrement(commonsId) {
-    return {
-        url: `/api/usercommons/forcurrentuser/decrementCows?commonsId=${commonsId}`,
-        method: "PUT",
-        params: {
-            commonsId: commonsId
-        }
-    }
-}
