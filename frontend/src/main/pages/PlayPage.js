@@ -8,7 +8,9 @@ import { Container, CardGroup } from "react-bootstrap";
 import ManageCows from "main/components/Commons/ManageCows";
 import FarmStats from "main/components/Commons/FarmStats";
 import Profits from "main/components/Commons/Profits";
-import { useBackend } from "main/utils/useBackend";
+import { useBackend, useBackendMutation } from "main/utils/useBackend";
+
+import { onDecrementSuccess, cellToAxiosParamsDecrement } from "main/utils/playPageUtils";
 
 export default function PlayPage() {
 
@@ -26,13 +28,6 @@ export default function PlayPage() {
           commonsId: commonsId
         }
       },
-      {
-        method: "PUT",
-        url: "/api/usercommons/forcurrentuser",
-        params: {
-          numCows: numCows
-        }
-      }
     );
 
     // const { data: userCommons, error: userCommonsError, status: userCommonsStatus } =
@@ -61,14 +56,47 @@ export default function PlayPage() {
       }
     );
 
+  const cellToAxiosParamsDecrement = (commonId) => ({
+      url: "/api/usercommons/forcurrentuser/decrementCows",
+      method: "PUT",
+      commonId: commonId
+  });
  
   const onBuy = (userCommons) => { 
     console.log("onBuy called:", userCommons); 
   };
   
+  const mutation = useBackendMutation(
+    cellToAxiosParamsDecrement,
+    { onDecrementSuccess },
+    // Stryker disable next-line all : hard to set up test for caching
+    [`/api/usercommons/forcurrentuser/decrementCows?commonsId=${commonsId}`]
+);
+
   const onSell = (userCommons) => { 
     console.log("onSell called:", userCommons);
+    // let decrement = useBackendMutation(
+    //   cellToAxiosParamsDecrement,
+    //   { onSuccess: onDecrementSuccess},
+    //   // Stryker disable next-line all : don't test internal caching of React Query
+    // );
+    mutation.mutate(userCommons);
+  
   };
+
+  // function onSell()
+  // {
+  //   let sell = useBackendMutation(
+  //     {
+  //       url: "/api/usercommons/forcurrentuser",
+  //       method: "COWDECREMENT",
+  //     }
+  //   );
+  //     return (
+  //       <Button variant="outline"
+  //     );
+    
+  // }
 
   return (
     
