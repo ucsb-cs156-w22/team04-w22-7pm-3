@@ -324,5 +324,88 @@ public class ProfitsControllerTests extends ControllerTestCase {
 
     // Tests for delete operations
 
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void delete_profit_test() throws Exception {
+        UserCommons expectedUserCommons = UserCommons.builder().id(3).commonsId(1).userId(1).build();
+        Profit existingProfit = Profit.builder().id(7).profit(100).time("03171973").userCommons(expectedUserCommons).build();
+        when(profitRepository.findById(7L)).thenReturn(Optional.of(existingProfit));
+
+        MvcResult response = mockMvc
+            .perform(delete("/api/profits?id=7").with(csrf()))
+            .andExpect(status().isOk()).andReturn();
+
+        verify(profitRepository, times(1)).findById(7L);
+        verify(profitRepository, times(1)).delete(existingProfit);
+
+        Map<String, Object> json = responseToJson(response);
+        assertEquals("Profit with id 7 deleted", json.get("message"));
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void delete_profit_invalid_user_test() throws Exception {
+        UserCommons expectedUserCommons = UserCommons.builder().id(3).commonsId(1).userId(10).build();
+        Profit existingProfit = Profit.builder().id(7).profit(100).time("03171973").userCommons(expectedUserCommons).build();
+        when(profitRepository.findById(7L)).thenReturn(Optional.of(existingProfit));
+
+        MvcResult response = mockMvc
+            .perform(delete("/api/profits?id=7").with(csrf()))
+            .andExpect(status().isNotFound()).andReturn();
+
+        verify(profitRepository, times(1)).findById(7L);
+        verify(profitRepository, times(0)).delete(existingProfit);
+
+        Map<String, Object> json = responseToJson(response);
+        assertEquals("EntityNotFoundException", json.get("type"));
+        assertEquals("Profit with id 7 not found", json.get("message"));
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void delete_profit_nonexistent_test() throws Exception {
+        MvcResult response = mockMvc
+            .perform(delete("/api/profits?id=7").with(csrf()))
+            .andExpect(status().isNotFound()).andReturn();
+
+        verify(profitRepository, times(1)).findById(7L);
+
+        Map<String, Object> json = responseToJson(response);
+        assertEquals("EntityNotFoundException", json.get("type"));
+        assertEquals("Profit with id 7 not found", json.get("message"));
+    }
+
+    @WithMockUser(roles = { "ADMIN" })
+    @Test
+    public void delete_profit_admin_test() throws Exception {
+        UserCommons expectedUserCommons = UserCommons.builder().id(3).commonsId(1).userId(10).build();
+        Profit existingProfit = Profit.builder().id(7).profit(100).time("03171973").userCommons(expectedUserCommons).build();
+        when(profitRepository.findById(7L)).thenReturn(Optional.of(existingProfit));
+
+        MvcResult response = mockMvc
+            .perform(delete("/api/profits/admin?id=7").with(csrf()))
+            .andExpect(status().isOk()).andReturn();
+
+        verify(profitRepository, times(1)).findById(7L);
+        verify(profitRepository, times(1)).delete(existingProfit);
+
+        Map<String, Object> json = responseToJson(response);
+        assertEquals("Profit with id 7 deleted", json.get("message"));
+    }
+
+    @WithMockUser(roles = { "ADMIN" })
+    @Test
+    public void delete_profit_admin_nonexistent_test() throws Exception {
+        MvcResult response = mockMvc
+            .perform(delete("/api/profits/admin?id=7").with(csrf()))
+            .andExpect(status().isNotFound()).andReturn();
+
+        verify(profitRepository, times(1)).findById(7L);
+
+        Map<String, Object> json = responseToJson(response);
+        assertEquals("EntityNotFoundException", json.get("type"));
+        assertEquals("Profit with id 7 not found", json.get("message"));
+    }
+
     // Tests for update operations
 }
