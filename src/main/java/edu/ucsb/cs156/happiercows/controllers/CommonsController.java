@@ -74,7 +74,14 @@ public class CommonsController extends ApiController {
       throws JsonProcessingException {
     log.info("name={}", params.getName());
     log.info("cowPrice={}", params.getCowPrice());
-    Commons c = Commons.builder().name(params.getName()).cowPrice(params.getCowPrice()).build();
+    Commons c = Commons.builder()
+            .name(params.getName())
+            .cowPrice(params.getCowPrice())
+            .milkPrice(params.getMilkPrice())
+            .startingBalance(params.getStartingBalance())
+            .startDate(params.getStartDate())
+            .endDate(params.getEndDate())
+            .build();
     Commons savedCommons = commonsRepository.save(c);
     String body = mapper.writeValueAsString(savedCommons);
     log.info("body={}", body);

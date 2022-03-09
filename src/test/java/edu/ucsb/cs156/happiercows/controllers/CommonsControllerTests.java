@@ -28,6 +28,7 @@ import static org.mockito.Mockito.eq;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -53,13 +54,29 @@ public class CommonsControllerTests extends ControllerTestCase {
   @WithMockUser(roles = { "ADMIN" })
   @Test
   public void createCommonsTest() throws Exception {
-    Commons expectedCommons = Commons.builder().name("TestCommons").build();
+    String testName = "TestCommons";
+    double testCowPrice = 10.4;
+    double testMilkPrice = 5.6;
+    double testStartingBalance = 50.0;
+    Date testStartDate = new Date(1646687907L);
+    Date testEndDate = new Date(1846687907L);
+    Commons expectedCommons = Commons.builder()
+            .name(testName)
+            .cowPrice(testCowPrice)
+            .milkPrice(testMilkPrice)
+            .startingBalance(testStartingBalance)
+            .startDate(testStartDate)
+            .endDate(testEndDate)
+            .build();
     ObjectMapper mapper = new ObjectMapper();
     String requestBody = mapper.writeValueAsString(expectedCommons);
     when(commonsRepository.save(any())).thenReturn(expectedCommons);
 
     MvcResult response = mockMvc
-        .perform(post("/api/commons/new?name=TestCommons").with(csrf()).contentType(MediaType.APPLICATION_JSON)
+        .perform(post(
+                String.format("/api/commons/new?name=%s?cowPrice=%f?milkPrice=%f?startingBalance=%f?startDate=%s?endDate=%s",
+                        testName, testCowPrice, testMilkPrice, testStartingBalance, testStartDate, testEndDate)
+        ).with(csrf()).contentType(MediaType.APPLICATION_JSON)
             .characterEncoding("utf-8").content(requestBody))
         .andExpect(status().isOk()).andReturn();
 
