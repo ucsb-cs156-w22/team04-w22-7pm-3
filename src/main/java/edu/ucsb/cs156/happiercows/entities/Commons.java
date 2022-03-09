@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
@@ -22,6 +23,11 @@ public class Commons {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;  
   private String name;
+  private double cowPrice;
+  private double milkPrice;
+  private double startingBalance;
+  private Date startDate;
+  private Date endDate;
 
   @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
   @JoinTable(name = "user_commons", 
