@@ -26,6 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,12 +58,11 @@ public class ProfitsControllerTests extends ControllerTestCase {
     private ObjectMapper objectMapper;
 
     // Tests for get operations
-
     @WithMockUser(roles = { "USER" })
     @Test
     public void get_profit_by_id_test() throws Exception {
         UserCommons expectedUserCommons = UserCommons.builder().id(3).commonsId(1).userId(1).build();
-        Profit expectedProfit = Profit.builder().id(7L).profit(100).time("03-17-1973").userCommons(expectedUserCommons).build();
+        Profit expectedProfit = Profit.builder().id(7L).profit(100).time("03171973").userCommons(expectedUserCommons).build();
         when(profitRepository.findById(7L)).thenReturn(Optional.of(expectedProfit));
 
         MvcResult response = mockMvc.perform(get("/api/profits?id=7"))
@@ -79,7 +79,7 @@ public class ProfitsControllerTests extends ControllerTestCase {
     @Test
     public void get_profit_by_id_admin_test() throws Exception {
         UserCommons expectedUserCommons = UserCommons.builder().id(3).commonsId(1).userId(10).build();
-        Profit expectedProfit = Profit.builder().id(7L).profit(100).time("03-17-1973").userCommons(expectedUserCommons).build();
+        Profit expectedProfit = Profit.builder().id(7L).profit(100).time("03171973").userCommons(expectedUserCommons).build();
         when(profitRepository.findById(7L)).thenReturn(Optional.of(expectedProfit));
       
         MvcResult response = mockMvc.perform(get("/api/profits/admin?id=7"))
@@ -97,7 +97,7 @@ public class ProfitsControllerTests extends ControllerTestCase {
     @Test
     public void get_profit_by_id_invalid_user_test() throws Exception {
         UserCommons expectedUserCommons = UserCommons.builder().id(3).commonsId(1).userId(10).build();
-        Profit expectedProfit = Profit.builder().id(7L).profit(100).time("03-17-1973").userCommons(expectedUserCommons).build();
+        Profit expectedProfit = Profit.builder().id(7L).profit(100).time("03171973").userCommons(expectedUserCommons).build();
         when(profitRepository.findById(7L)).thenReturn(Optional.of(expectedProfit));
       
         MvcResult response = mockMvc.perform(get("/api/profits?id=7"))
@@ -141,8 +141,8 @@ public class ProfitsControllerTests extends ControllerTestCase {
     @Test
     public void get_all_profits_by_usercommons_test() throws Exception {
         UserCommons expectedUserCommons = UserCommons.builder().id(3).commonsId(1).userId(1).build();
-        Profit profit1 = Profit.builder().id(7L).profit(100).time("03-17-1973").userCommons(expectedUserCommons).build();
-        Profit profit2 = Profit.builder().id(8L).profit(150).time("03-18-1973").userCommons(expectedUserCommons).build();
+        Profit profit1 = Profit.builder().id(7L).profit(100).time("03171973").userCommons(expectedUserCommons).build();
+        Profit profit2 = Profit.builder().id(8L).profit(150).time("03181973").userCommons(expectedUserCommons).build();
         
         List<Profit> expectedProfits = new ArrayList<Profit>();
         expectedProfits.add(profit1);
@@ -165,8 +165,8 @@ public class ProfitsControllerTests extends ControllerTestCase {
     @Test
     public void get_all_profits_by_usercommons_invalid_user_test() throws Exception {
         UserCommons expectedUserCommons = UserCommons.builder().id(3).commonsId(1).userId(10).build();
-        Profit profit1 = Profit.builder().id(7L).profit(100).time("03-17-1973").userCommons(expectedUserCommons).build();
-        Profit profit2 = Profit.builder().id(8L).profit(150).time("03-18-1973").userCommons(expectedUserCommons).build();
+        Profit profit1 = Profit.builder().id(7L).profit(100).time("03171973").userCommons(expectedUserCommons).build();
+        Profit profit2 = Profit.builder().id(8L).profit(150).time("03181973").userCommons(expectedUserCommons).build();
         
         List<Profit> expectedProfits = new ArrayList<Profit>();
         expectedProfits.add(profit1);
@@ -201,8 +201,8 @@ public class ProfitsControllerTests extends ControllerTestCase {
     @Test
     public void get_all_profits_by_usercommons_admin_test() throws Exception {
         UserCommons expectedUserCommons = UserCommons.builder().id(3).commonsId(1).userId(10).build();
-        Profit profit1 = Profit.builder().id(7L).profit(100).time("03-17-1973").userCommons(expectedUserCommons).build();
-        Profit profit2 = Profit.builder().id(8L).profit(150).time("03-18-1973").userCommons(expectedUserCommons).build();
+        Profit profit1 = Profit.builder().id(7L).profit(100).time("03171973").userCommons(expectedUserCommons).build();
+        Profit profit2 = Profit.builder().id(8L).profit(150).time("03181973").userCommons(expectedUserCommons).build();
         
         List<Profit> expectedProfits = new ArrayList<Profit>();
         expectedProfits.add(profit1);
@@ -235,6 +235,92 @@ public class ProfitsControllerTests extends ControllerTestCase {
     }
 
     // Tests for create operations
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void create_profit_test() throws Exception {
+        UserCommons expectedUserCommons = UserCommons.builder().id(3).commonsId(1).userId(1).build();
+        Profit expectedProfit = Profit.builder().id(0).profit(100).time("03171973").userCommons(expectedUserCommons).build();
+        when(profitRepository.save(expectedProfit)).thenReturn(expectedProfit);
+        when(userCommonsRepository.findById(3L)).thenReturn(Optional.of(expectedUserCommons));
+
+        MvcResult response = mockMvc
+            .perform(post("/api/profits/post?profit=100&time=03171973&userCommonsId=3").with(csrf()))
+            .andExpect(status().isOk()).andReturn();
+
+        verify(userCommonsRepository, times(1)).findById(3L);
+        verify(profitRepository, times(1)).save(expectedProfit);
+    
+        String expectedJson = mapper.writeValueAsString(expectedProfit);
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals(expectedJson, responseString);
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void create_profit_invalid_usercommons_test() throws Exception {
+        UserCommons expectedUserCommons = UserCommons.builder().id(3).commonsId(1).userId(10).build();
+        Profit expectedProfit = Profit.builder().id(0).profit(100).time("03171973").userCommons(expectedUserCommons).build();
+        when(profitRepository.save(expectedProfit)).thenReturn(expectedProfit);
+        when(userCommonsRepository.findById(3L)).thenReturn(Optional.of(expectedUserCommons));
+
+        MvcResult response = mockMvc
+            .perform(post("/api/profits/post?profit=100&time=03171973&userCommonsId=3").with(csrf()))
+            .andExpect(status().isNotFound()).andReturn();
+
+        verify(userCommonsRepository, times(1)).findById(3L);
+    
+        Map<String, Object> json = responseToJson(response);
+        assertEquals("EntityNotFoundException", json.get("type"));
+        assertEquals("UserCommons with id 3 not found", json.get("message"));
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void create_profit_nonexistent_usercommons_test() throws Exception {
+        MvcResult response = mockMvc
+            .perform(post("/api/profits/post?profit=100&time=03171973&userCommonsId=3").with(csrf()))
+            .andExpect(status().isNotFound()).andReturn();
+
+        verify(userCommonsRepository, times(1)).findById(3L);
+    
+        Map<String, Object> json = responseToJson(response);
+        assertEquals("EntityNotFoundException", json.get("type"));
+        assertEquals("UserCommons with id 3 not found", json.get("message"));
+    }
+
+    @WithMockUser(roles = { "ADMIN" })
+    @Test
+    public void create_profit_admin_test() throws Exception {
+        UserCommons expectedUserCommons = UserCommons.builder().id(3).commonsId(1).userId(10).build();
+        Profit expectedProfit = Profit.builder().id(0).profit(100).time("03171973").userCommons(expectedUserCommons).build();
+        when(profitRepository.save(expectedProfit)).thenReturn(expectedProfit);
+        when(userCommonsRepository.findById(3L)).thenReturn(Optional.of(expectedUserCommons));
+
+        MvcResult response = mockMvc
+            .perform(post("/api/profits/admin/post?profit=100&time=03171973&userCommonsId=3").with(csrf()))
+            .andExpect(status().isOk()).andReturn();
+
+        verify(userCommonsRepository, times(1)).findById(3L);
+        verify(profitRepository, times(1)).save(expectedProfit);
+    
+        String expectedJson = mapper.writeValueAsString(expectedProfit);
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals(expectedJson, responseString);
+    }
+
+    @WithMockUser(roles = { "ADMIN" })
+    @Test
+    public void create_profit_admin_nonexistent_usercommons_test() throws Exception {
+        MvcResult response = mockMvc
+            .perform(post("/api/profits/admin/post?profit=100&time=03171973&userCommonsId=3").with(csrf()))
+            .andExpect(status().isNotFound()).andReturn();
+
+        verify(userCommonsRepository, times(1)).findById(3L);
+    
+        Map<String, Object> json = responseToJson(response);
+        assertEquals("EntityNotFoundException", json.get("type"));
+        assertEquals("UserCommons with id 3 not found", json.get("message"));
+    }
 
     // Tests for delete operations
 
