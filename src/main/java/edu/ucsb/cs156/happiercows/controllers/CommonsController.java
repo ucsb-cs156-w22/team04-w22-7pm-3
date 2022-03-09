@@ -46,7 +46,6 @@ public class CommonsController extends ApiController {
   ObjectMapper mapper;
 
   @ApiOperation(value = "Get a list of all commons")
-  // @PreAuthorize("hasRole('ROLE_USER')")                   //gets rid of toast spam when not logged in.
   @GetMapping("/all")
   public ResponseEntity<String> getCommons() throws JsonProcessingException {
     log.info("getCommons()...");
