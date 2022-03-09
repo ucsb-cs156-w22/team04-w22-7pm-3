@@ -123,7 +123,7 @@ public class ProfitsController extends ApiController {
     @PostMapping("/post")
     public Profit createProfit(
             @ApiParam("profit") @RequestParam long profit,
-            @ApiParam("time") @RequestParam long time,
+            @ApiParam("time") @RequestParam String time,
             @ApiParam("userCommonsId") @RequestParam long userCommonsId) {
         
         User u = getCurrentUser().getUser();
@@ -150,7 +150,7 @@ public class ProfitsController extends ApiController {
     @PostMapping("/admin/post")
     public Profit creadProfitAdmin(
             @ApiParam("profit") @RequestParam long profit,
-            @ApiParam("time") @RequestParam long time,
+            @ApiParam("time") @RequestParam String time,
             @ApiParam("userCommonsId") @RequestParam long userCommonsId) {
         
         // Throw error in case UserCommons does not exist

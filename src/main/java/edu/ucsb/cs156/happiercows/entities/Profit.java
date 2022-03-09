@@ -28,5 +28,5 @@ public class Profit {
 
   private UserCommons userCommons;
   private long profit;
-  private long time;
+  private String time;
 }
