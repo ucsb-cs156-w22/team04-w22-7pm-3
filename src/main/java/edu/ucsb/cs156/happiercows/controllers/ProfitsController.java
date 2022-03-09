@@ -226,7 +226,7 @@ public class ProfitsController extends ApiController {
     @ApiOperation(value = "Update a single profit by ID (admin only, can't change ownership)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/admin")
-    public Profit putProfitById_admin(
+    public Profit updateProfitByIdAdmin(
             @ApiParam("id") @RequestParam Long id,
             @RequestBody @Valid Profit incomingProfit) {
         
