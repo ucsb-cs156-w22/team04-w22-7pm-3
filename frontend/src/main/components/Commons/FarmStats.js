@@ -1,6 +1,9 @@
 import React from "react";
 import { Card } from "react-bootstrap";
 
+import cash from 'assets/Cash.png';
+import health from 'assets/Health.png';
+
 const FarmStats = ({userCommons}) => {
    
     return (
@@ -9,13 +12,13 @@ const FarmStats = ({userCommons}) => {
         <Card.Body>
             {/* update total wealth and cow health with data from fixture */}
             <Card.Text>
-                [ADD PIC HERE] 
+                <img src={cash} alt="Cash" />
             </Card.Text>
             <Card.Text>
                 Total Wealth: ${userCommons?.totalWealth}
             </Card.Text>
             <Card.Text>
-                [ADD PIC HERE] 
+                <img src={health} alt="Health" /> 
             </Card.Text>
             <Card.Text>
                 Cow Health: {userCommons?.avgCowHealth}%
