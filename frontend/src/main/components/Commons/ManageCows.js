@@ -10,7 +10,7 @@ const ManageCows = ({userCommons, onBuy, onSell}) =>  {
         <Card.Header as="h5">Manage Cows</Card.Header>
         <Card.Body>
             {/* change $10 to info from fixture */}
-            <Card.Title>Market Cow Price: ${userCommons?.commons?.cowPrice} &nbsp; Selling Price : ${userCommons?.commons?.cowPrice}</Card.Title>
+            <Card.Title>Market Cow Price: ${userCommons?.commons?.cowPrice} &nbsp; Selling Price : ${userCommons?.commons?.cowPrice * 0.8}</Card.Title>
             {/*The selling price should be updated when fixtures are set up. S_P = M_P * 0.8 * avgCowHealth /100 */}
                 <Row>
                     <Col>
