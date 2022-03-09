@@ -30,19 +30,6 @@ export default function PlayPage() {
       },
     );
 
-    // const { data: userCommons, error: userCommonsError, status: userCommonsStatus } =
-    // useBackend(
-    //   // Stryker disable next-line all : don't test internal caching of React Query
-    //   [`/api/usercommons/forcurrentuser?commonsId=${commonsId}`],
-    //   {  // Stryker disable next-line all : GET is the default, so changing this to "" doesn't introduce a bug
-    //     method: "PUT",
-    //     url: "/api/usercommons/forcurrentuser",
-    //     params: {
-    //       numCows: numCows
-    //     }
-    //   }
-    // );
-
   const { data: commons, error: commonsError, status: commonsStatus } =
     useBackend(
       // Stryker disable next-line all : don't test internal caching of React Query
@@ -79,7 +66,7 @@ export default function PlayPage() {
   )
 
   
-  const mutation = useBackendMutation(
+  const sellMutation = useBackendMutation(
     cellToAxiosParamsDecrement,
     { onDecrementSuccess },
     // Stryker disable next-line all : hard to set up test for caching
@@ -94,12 +81,7 @@ export default function PlayPage() {
 
   const onSell = (userCommons) => { 
     console.log("onSell called:", userCommons);
-    // let decrement = useBackendMutation(
-    //   cellToAxiosParamsDecrement,
-    //   { onSuccess: onDecrementSuccess},
-    //   // Stryker disable next-line all : don't test internal caching of React Query
-    // );
-    mutation.mutate(userCommons);
+    sellMutation.mutate(userCommons);
   
   };
 
