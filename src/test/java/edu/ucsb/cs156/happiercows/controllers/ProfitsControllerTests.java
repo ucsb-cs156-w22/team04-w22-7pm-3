@@ -414,12 +414,18 @@ public class ProfitsControllerTests extends ControllerTestCase {
     @Test
     public void update_profit_test() throws Exception {
         UserCommons expectedUserCommons = UserCommons.builder().id(3).commonsId(1).userId(1).build();
+        UserCommons otherUserCommons = UserCommons.builder().id(999).commonsId(2).userId(10).build();
+        Profit profit1 = Profit.builder().id(7).profit(10).time("01011973").userCommons(expectedUserCommons).build();
 
-        Profit updatedProfit = Profit.builder().id(7).profit(999).time("03171973").userCommons(expectedUserCommons).build();
+        // We deliberately set the user information to another userCommons
+        // This should get ignored and overwritten with current userCommons when profit is saved
+        Profit updatedProfit = Profit.builder().id(7).profit(999).time("03171973").userCommons(otherUserCommons).build();
+        Profit correctProfit = Profit.builder().id(7).profit(999).time("03171973").userCommons(expectedUserCommons).build();
+
         String requestBody = mapper.writeValueAsString(updatedProfit);
-        String expectedReturn = mapper.writeValueAsString(updatedProfit);
+        String expectedReturn = mapper.writeValueAsString(correctProfit);
 
-        when(profitRepository.findById(7L)).thenReturn(Optional.of(updatedProfit));
+        when(profitRepository.findById(7L)).thenReturn(Optional.of(profit1));
 
         MvcResult response = mockMvc
         .perform(put("/api/profits?id=7")
@@ -430,7 +436,7 @@ public class ProfitsControllerTests extends ControllerTestCase {
             .andExpect(status().isOk()).andReturn();
 
         verify(profitRepository, times(1)).findById(7L);
-        verify(profitRepository, times(1)).save(updatedProfit);
+        verify(profitRepository, times(1)).save(correctProfit); // should be saved with correct userCommons
         String responseString = response.getResponse().getContentAsString();
         assertEquals(expectedReturn, responseString);
     }
@@ -486,14 +492,19 @@ public class ProfitsControllerTests extends ControllerTestCase {
     @WithMockUser(roles = { "ADMIN" })
     @Test
     public void update_profit_admin_test() throws Exception {
-        UserCommons expectedUserCommons = UserCommons.builder().id(3).commonsId(1).userId(10).build();
+        UserCommons otherUserCommons = UserCommons.builder().id(3).commonsId(1).userId(10).build();
+        UserCommons yetAnotherUserCommons = UserCommons.builder().id(999).commonsId(2).userId(100).build();
+        Profit profit1 = Profit.builder().id(7).profit(10).time("01011973").userCommons(otherUserCommons).build();
 
-        Profit updatedProfit = Profit.builder().id(7).profit(999).time("03171973").userCommons(expectedUserCommons).build();
+        // We deliberately set the user information to another userCommons
+        // This should get ignored and overwritten with current userCommons when profit is saved
+        Profit updatedProfit = Profit.builder().id(7).profit(999).time("03171973").userCommons(yetAnotherUserCommons).build();
+        Profit correctProfit = Profit.builder().id(7).profit(999).time("03171973").userCommons(otherUserCommons).build();
 
         String requestBody = mapper.writeValueAsString(updatedProfit);
-        String expectedReturn = mapper.writeValueAsString(updatedProfit);
+        String expectedReturn = mapper.writeValueAsString(correctProfit);
 
-        when(profitRepository.findById(7L)).thenReturn(Optional.of(updatedProfit));
+        when(profitRepository.findById(7L)).thenReturn(Optional.of(profit1));
 
         MvcResult response = mockMvc
         .perform(put("/api/profits/admin?id=7")
@@ -504,7 +515,7 @@ public class ProfitsControllerTests extends ControllerTestCase {
             .andExpect(status().isOk()).andReturn();
 
         verify(profitRepository, times(1)).findById(7L);
-        verify(profitRepository, times(1)).save(updatedProfit);
+        verify(profitRepository, times(1)).save(correctProfit); // should be saved with correct userCommons
         String responseString = response.getResponse().getContentAsString();
         assertEquals(expectedReturn, responseString);
     }
