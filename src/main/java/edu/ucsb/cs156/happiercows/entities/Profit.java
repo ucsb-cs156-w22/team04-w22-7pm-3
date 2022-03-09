@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import java.time.LocalDateTime;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -28,5 +30,5 @@ public class Profit {
 
   private UserCommons userCommons;
   private long profit;
-  private String time;
+  private LocalDateTime time;
 }

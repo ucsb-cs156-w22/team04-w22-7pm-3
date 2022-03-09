@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.Optional;
+import java.time.LocalDateTime;
 
 // Code is mostly lifted from TodosController in demo-spring-react-example-v2
 
@@ -123,7 +125,7 @@ public class ProfitsController extends ApiController {
     @PostMapping("/post")
     public Profit createProfit(
             @ApiParam("profit") @RequestParam long profit,
-            @ApiParam("time") @RequestParam String time,
+            @ApiParam("date (in iso format, e.g. YYYY-mm-ddTHH:MM:SS; see https://en.wikipedia.org/wiki/ISO_8601)") @RequestParam("localDateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime localDateTime,
             @ApiParam("userCommonsId") @RequestParam long userCommonsId) {
         
         User u = getCurrentUser().getUser();
@@ -140,7 +142,7 @@ public class ProfitsController extends ApiController {
         Profit p = new Profit();
         p.setUserCommons(userCommons);
         p.setProfit(profit);
-        p.setTime(time);
+        p.setTime(localDateTime);
         Profit newProfit = profitRepository.save(p);
         return newProfit;
     }
@@ -150,7 +152,7 @@ public class ProfitsController extends ApiController {
     @PostMapping("/admin/post")
     public Profit createProfitAdmin(
             @ApiParam("profit") @RequestParam long profit,
-            @ApiParam("time") @RequestParam String time,
+            @ApiParam("date (in iso format, e.g. YYYY-mm-ddTHH:MM:SS; see https://en.wikipedia.org/wiki/ISO_8601)") @RequestParam("localDateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime localDateTime,
             @ApiParam("userCommonsId") @RequestParam long userCommonsId) {
         
         // Throw error in case UserCommons does not exist
@@ -160,7 +162,7 @@ public class ProfitsController extends ApiController {
         Profit p = new Profit();
         p.setUserCommons(userCommons);
         p.setProfit(profit);
-        p.setTime(time);
+        p.setTime(localDateTime);
         Profit newProfit = profitRepository.save(p);
         return newProfit;
     }
