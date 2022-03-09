@@ -10,7 +10,7 @@ import FarmStats from "main/components/Commons/FarmStats";
 import Profits from "main/components/Commons/Profits";
 import { useBackend, useBackendMutation } from "main/utils/useBackend";
 
-import { onDecrementSuccess, cellToAxiosParamsDecrement } from "main/utils/playPageUtils";
+import { onDecrementSuccess, onIncrementSuccess } from "main/utils/playPageUtils";
 
 export default function PlayPage() {
 
@@ -62,12 +62,22 @@ export default function PlayPage() {
       params: {
         commonsId: userCommons.commonsId
       }
-      //commonsId: commonsId
   });
- 
-  const onBuy = (userCommons) => { 
-    console.log("onBuy called:", userCommons); 
-  };
+
+  const cellToAxiosParamsIncrement = () => ({
+    url: "/api/usercommons/forcurrentuser/incrementCows",
+    method: "PUT",
+    params: {
+      commonsId: userCommons.commonsId
+    }
+  });
+
+  const buyMutation = useBackendMutation(
+    cellToAxiosParamsIncrement,
+    { onIncrementSuccess },
+    [`/api/usercommons/forcurrentuser/decrementCows?commonsId=${commonsId}`]
+  )
+
   
   const mutation = useBackendMutation(
     cellToAxiosParamsDecrement,
@@ -75,6 +85,12 @@ export default function PlayPage() {
     // Stryker disable next-line all : hard to set up test for caching
     [`/api/usercommons/forcurrentuser/decrementCows?commonsId=${commonsId}`]
 );
+
+  const onBuy = (userCommons) => { 
+    console.log("onBuy called:", userCommons); 
+    buyMutation.mutate(userCommons);
+  };
+
 
   const onSell = (userCommons) => { 
     console.log("onSell called:", userCommons);

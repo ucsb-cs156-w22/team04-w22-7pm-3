@@ -73,7 +73,6 @@ public class UserCommonsController extends ApiController {
         .orElseThrow(
             () -> new EntityNotFoundException(UserCommons.class, "commonsId", commonsId, "userId", userId));
 
-      
       if (userCommons.getNumCows() > 0) {
         userCommons.setNumCows(userCommons.getNumCows() - 1);
         userCommonsRepository.save(userCommons);
@@ -82,6 +81,24 @@ public class UserCommonsController extends ApiController {
         return ResponseEntity.ok().body(String.format("Error - numCows is less than or equal to 0"));
       }
       return ResponseEntity.ok().body(String.format("Cow count decremented"));
+  }
+
+  @ApiOperation(value = "Increment cows for current user")
+  @PreAuthorize("hasRole('ROLE_USER')")
+  @PutMapping("/forcurrentuser/incrementCows")
+  public ResponseEntity<String> incrementCows(
+      @ApiParam("commonsId") @RequestParam Long commonsId) throws JsonProcessingException {
+      
+
+      User u = getCurrentUser().getUser();
+      Long userId = u.getId();
+      UserCommons userCommons = userCommonsRepository.findByCommonsIdAndUserId(commonsId, userId)
+        .orElseThrow(
+            () -> new EntityNotFoundException(UserCommons.class, "commonsId", commonsId, "userId", userId));
+
+      userCommons.setNumCows(userCommons.getNumCows() + 1);
+      userCommonsRepository.save(userCommons);
+      return ResponseEntity.ok().body(String.format("Cow count incremented"));
   }
 
   
