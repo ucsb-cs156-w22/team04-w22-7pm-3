@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, _Image, Button, Row, Col} from "react-bootstrap";
-// import cowHead from "../../../CowHead.png"; 
+import cowhead from 'assets/CowHead.png';
 
 // add parameters 
 const ManageCows = ({userCommons, onBuy, onSell}) =>  {
@@ -15,22 +15,17 @@ const ManageCows = ({userCommons, onBuy, onSell}) =>  {
                 <Row>
                     <Col>
                         <Card.Text>
-                            [ADD PIC HERE] 
+                            <img src={cowhead} alt="Cowhead" /> 
                         </Card.Text>
                     </Col>
-                    <Col>
-                        <Button variant="outline-danger" onClick={()=>{onBuy(userCommons)}} data-testid={"buy-cow-button"}>+</Button>
-                        <br/>
-                        <br/>
-                        <Button variant="outline-danger" onClick={()=>{onSell(userCommons)}} data-testid={"sell-cow-button"}>-</Button>
-                        <br/>
-                        <br/>
-                    </Col>
                 </Row>
-          
-                    Note: If you increase cows, they will be automatically bought, and if you decrease, 
-                    the cows will be sold for the current cow price, time the health of that cow (as a percentage). 
+                &nbsp;
+                <Row>
+                    <Button variant="outline-danger" onClick={()=>{onBuy(userCommons)}} data-testid={"buy-cow-button"}>Buy</Button> &nbsp; <Button variant="outline-danger" onClick={()=>{onSell(userCommons)}} data-testid={"sell-cow-button"}>Sell</Button>
+                </Row>
         
+                    Note: Selling price is current market cow price times the health of that cow (as a percentage).
+
         </Card.Body>
         </Card>
     ); 
