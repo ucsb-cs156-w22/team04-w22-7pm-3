@@ -56,10 +56,13 @@ export default function PlayPage() {
       }
     );
 
-  const cellToAxiosParamsDecrement = (commonId) => ({
+  const cellToAxiosParamsDecrement = () => ({
       url: "/api/usercommons/forcurrentuser/decrementCows",
       method: "PUT",
-      commonId: commonId
+      params: {
+        commonsId: userCommons.commonsId
+      }
+      //commonsId: commonsId
   });
  
   const onBuy = (userCommons) => { 
