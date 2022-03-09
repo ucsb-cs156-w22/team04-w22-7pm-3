@@ -6,6 +6,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.http.MediaType;
 
 import edu.ucsb.cs156.happiercows.ControllerTestCase;
 import edu.ucsb.cs156.happiercows.controllers.ProfitsController;
@@ -24,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -408,4 +410,125 @@ public class ProfitsControllerTests extends ControllerTestCase {
     }
 
     // Tests for update operations
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void update_profit_test() throws Exception {
+        UserCommons expectedUserCommons = UserCommons.builder().id(3).commonsId(1).userId(1).build();
+
+        Profit updatedProfit = Profit.builder().id(7).profit(999).time("03171973").userCommons(expectedUserCommons).build();
+        String requestBody = mapper.writeValueAsString(updatedProfit);
+        String expectedReturn = mapper.writeValueAsString(updatedProfit);
+
+        when(profitRepository.findById(7L)).thenReturn(Optional.of(updatedProfit));
+
+        MvcResult response = mockMvc
+        .perform(put("/api/profits?id=7")
+            .contentType(MediaType.APPLICATION_JSON)
+            .characterEncoding("utf-8")
+            .content(requestBody)
+            .with(csrf()))
+            .andExpect(status().isOk()).andReturn();
+
+        verify(profitRepository, times(1)).findById(7L);
+        verify(profitRepository, times(1)).save(updatedProfit);
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals(expectedReturn, responseString);
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void update_profit_invalid_user_test() throws Exception {
+        UserCommons expectedUserCommons = UserCommons.builder().id(3).commonsId(1).userId(10).build();
+
+        Profit updatedProfit = Profit.builder().id(7).profit(999).time("03171973").userCommons(expectedUserCommons).build();
+        String requestBody = mapper.writeValueAsString(updatedProfit);
+
+        when(profitRepository.findById(7L)).thenReturn(Optional.of(updatedProfit));
+
+        MvcResult response = mockMvc
+        .perform(put("/api/profits?id=7")
+            .contentType(MediaType.APPLICATION_JSON)
+            .characterEncoding("utf-8")
+            .content(requestBody)
+            .with(csrf()))
+            .andExpect(status().isNotFound()).andReturn();
+
+        verify(profitRepository, times(1)).findById(7L);
+        verify(profitRepository, times(0)).save(updatedProfit);
+        Map<String, Object> json = responseToJson(response);
+        assertEquals("EntityNotFoundException", json.get("type"));
+        assertEquals("Profit with id 7 not found", json.get("message"));
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void update_profit_nonexistent_test() throws Exception {
+        UserCommons expectedUserCommons = UserCommons.builder().id(3).commonsId(1).userId(10).build();
+
+        Profit dummyProfit = Profit.builder().id(7).profit(999).time("03171973").userCommons(expectedUserCommons).build();
+        String requestBody = mapper.writeValueAsString(dummyProfit);
+
+        MvcResult response = mockMvc
+        .perform(put("/api/profits?id=7")
+            .contentType(MediaType.APPLICATION_JSON)
+            .characterEncoding("utf-8")
+            .content(requestBody)
+            .with(csrf()))
+            .andExpect(status().isNotFound()).andReturn();
+
+        verify(profitRepository, times(1)).findById(7L);
+        verify(profitRepository, times(0)).save(dummyProfit);
+        Map<String, Object> json = responseToJson(response);
+        assertEquals("EntityNotFoundException", json.get("type"));
+        assertEquals("Profit with id 7 not found", json.get("message"));
+    }
+
+    @WithMockUser(roles = { "ADMIN" })
+    @Test
+    public void update_profit_admin_test() throws Exception {
+        UserCommons expectedUserCommons = UserCommons.builder().id(3).commonsId(1).userId(10).build();
+
+        Profit updatedProfit = Profit.builder().id(7).profit(999).time("03171973").userCommons(expectedUserCommons).build();
+
+        String requestBody = mapper.writeValueAsString(updatedProfit);
+        String expectedReturn = mapper.writeValueAsString(updatedProfit);
+
+        when(profitRepository.findById(7L)).thenReturn(Optional.of(updatedProfit));
+
+        MvcResult response = mockMvc
+        .perform(put("/api/profits/admin?id=7")
+            .contentType(MediaType.APPLICATION_JSON)
+            .characterEncoding("utf-8")
+            .content(requestBody)
+            .with(csrf()))
+            .andExpect(status().isOk()).andReturn();
+
+        verify(profitRepository, times(1)).findById(7L);
+        verify(profitRepository, times(1)).save(updatedProfit);
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals(expectedReturn, responseString);
+    }
+
+    @WithMockUser(roles = { "ADMIN" })
+    @Test
+    public void update_profit_admin_nonexistent_test() throws Exception {
+        UserCommons expectedUserCommons = UserCommons.builder().id(3).commonsId(1).userId(10).build();
+
+        Profit dummyProfit = Profit.builder().id(7).profit(999).time("03171973").userCommons(expectedUserCommons).build();
+        String requestBody = mapper.writeValueAsString(dummyProfit);
+
+        MvcResult response = mockMvc
+        .perform(put("/api/profits/admin?id=7")
+            .contentType(MediaType.APPLICATION_JSON)
+            .characterEncoding("utf-8")
+            .content(requestBody)
+            .with(csrf()))
+            .andExpect(status().isNotFound()).andReturn();
+
+        verify(profitRepository, times(1)).findById(7L);
+        verify(profitRepository, times(0)).save(dummyProfit);
+        Map<String, Object> json = responseToJson(response);
+        assertEquals("EntityNotFoundException", json.get("type"));
+        assertEquals("Profit with id 7 not found", json.get("message"));
+    }
 }
