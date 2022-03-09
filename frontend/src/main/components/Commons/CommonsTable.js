@@ -1,7 +1,7 @@
 import React from "react";
 import OurTable from "main/components/OurTable";
 
-export default function AdminDisplayTable({ admins, currentUser }) {
+export default function CommonsTable({ commons, currentUser }) {
     
     // Stryker disable ArrayDeclaration : [columns] and [students] are performance optimization; mutation preserves correctness
     const memoizedColumns = React.useMemo(() => 
@@ -12,32 +12,33 @@ export default function AdminDisplayTable({ admins, currentUser }) {
             },
             {
                 Header: "Milk Price",
-                accessor: "milk_price",
+                accessor: "milkPrice",
             },
             {
                 Header: "Cow Price",
-                accessor: "cow_price",
+                accessor: "cowPrice",
             },
             {
                 Header: "Commons Name",
-                accessor: "commons_name",
+                accessor: "name",
             },
             {
                 Header: "Starting Balance",
-                accessor: "balance",
+                accessor: "startingBalance",
             },
             {
                 Header: "Starting Date",
-                accessor: "date",
+                accessor: "startDate",
             }
+            
         ], 
     );
-    const memoizedDates = React.useMemo(() => admins);
+    const memoizedDates = React.useMemo(() => commons);
     // Stryker enable ArrayDeclaration
 
     return <OurTable
         data={memoizedDates}
         columns={memoizedColumns}
-        testid={"AdminDisplayTable"}
+        testid={"CommonsTable"}
     />;
 };

@@ -1,13 +1,13 @@
 
 import { fireEvent, render, waitFor } from "@testing-library/react";
-import  adminDisplayFixtures  from "fixtures/adminDisplayFixtures";
-import AdminDisplayTable from "main/components/Commons/AdminDisplayTable"
+import  commonsFixtures  from "fixtures/commonsFixtures";
+import CommonsTable from "main/components/Commons/CommonsTable"
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
 import { currentUserFixtures } from "fixtures/currentUserFixtures";
 
 
-describe("AdminDsplayTable tests", () => {
+describe("CommonsTable tests", () => {
   const queryClient = new QueryClient();
   
   test("renders without crashing for empty table with user not logged in", () => {
@@ -16,7 +16,7 @@ describe("AdminDsplayTable tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
-          <AdminDisplayTable admins={[]} currentUser={currentUser} />
+          <CommonsTable commons={[]} currentUser={currentUser} />
         </MemoryRouter>
       </QueryClientProvider>
 
@@ -29,7 +29,7 @@ describe("AdminDsplayTable tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
-          <AdminDisplayTable admins={[]} currentUser={currentUser} />
+          <CommonsTable commons={[]} currentUser={currentUser} />
         </MemoryRouter>
       </QueryClientProvider>
 
@@ -43,7 +43,7 @@ describe("AdminDsplayTable tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
-          <AdminDisplayTable admins={[]} currentUser={currentUser} />
+          <CommonsTable commons={[]} currentUser={currentUser} />
         </MemoryRouter>
       </QueryClientProvider>
 
@@ -57,15 +57,15 @@ describe("AdminDsplayTable tests", () => {
     const { getByText, getByTestId } = render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
-          <AdminDisplayTable admins={adminDisplayFixtures.threeAdmins} currentUser={currentUser} />
+          <CommonsTable commons={commonsFixtures.threeCommons} currentUser={currentUser} />
         </MemoryRouter>
       </QueryClientProvider>
 
     );
 
     const expectedHeaders = ["ID Number", "Milk Price", "Cow Price", "Commons Name", "Starting Balance", "Starting Date"];
-    const expectedFields = ["id", "milk_price", "cow_price", "commons_name", "balance", "date" ];
-    const testId = "AdminDisplayTable";
+    const expectedFields = ["id", "milkPrice", "cowPrice", "name", "startingBalance", "startDate" ];
+    const testId = "CommonsTable";
 
     expectedHeaders.forEach( (headerText) => {
       const header = getByText(headerText);
@@ -77,12 +77,12 @@ describe("AdminDsplayTable tests", () => {
       expect(header).toBeInTheDocument();
     });
 
-    expect(getByTestId(`${testId}-cell-row-0-col-id`)).toHaveTextContent("5");
-    expect(getByTestId(`${testId}-cell-row-1-col-id`)).toHaveTextContent("6");
-    expect(getByTestId(`${testId}-cell-row-2-col-id`)).toHaveTextContent("1");
-    expect(getByTestId(`${testId}-cell-row-0-col-commons_name`)).toHaveTextContent("UCSB");
-    expect(getByTestId(`${testId}-cell-row-1-col-commons_name`)).toHaveTextContent("Isla Vista");
-    expect(getByTestId(`${testId}-cell-row-2-col-commons_name`)).toHaveTextContent("Vicky");
+    expect(getByTestId(`${testId}-cell-row-0-col-id`)).toHaveTextContent(5);
+    expect(getByTestId(`${testId}-cell-row-1-col-id`)).toHaveTextContent(4);
+    expect(getByTestId(`${testId}-cell-row-2-col-id`)).toHaveTextContent(1);
+    expect(getByTestId(`${testId}-cell-row-0-col-name`)).toHaveTextContent("Seths Common");
+    expect(getByTestId(`${testId}-cell-row-1-col-name`)).toHaveTextContent("Elizabeth's Commons");
+    expect(getByTestId(`${testId}-cell-row-2-col-name`)).toHaveTextContent("Vicky's Commons");
 
   });
   

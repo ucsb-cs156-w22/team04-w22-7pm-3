@@ -1,32 +1,27 @@
 import React from 'react';
 
-import AdminDisplayTable from "main/components/Commons/AdminDisplayTable";
-import adminDisplayFixtures from 'fixtures/adminDisplayFixtures';
+import CommonsTable from "main/components/Commons/CommonsTable";
+import commonsFixtures from 'fixtures/commonsFixtures';
 
 export default {
-    title: 'components/Commons/AdminDisplayTable',
-    component: AdminDisplayTable
+    title: 'components/Commons/CommonsTable',
+    component: CommonsTable
 };
 
 const Template = (args) => {
     return (
-        <AdminDisplayTable {...args} />
+        <CommonsTable {...args} />
     )
 };
 
 export const Empty = Template.bind({});
 
 Empty.args = {
-    admins: []
+    commons: []
 };
 
-export const threeAdmins = Template.bind({});
-threeAdmins.args = {
-    admins: adminDisplayFixtures.threeAdmins
+export const threeCommons = Template.bind({});
+threeCommons.args = {
+    commons: commonsFixtures.threeCommons
 };
 
-// export const oneAdmin = Template.bind({});
-
-// oneAdmin.args = {
-//     admins: adminDisplayFixtures.oneAdmin
-// };
