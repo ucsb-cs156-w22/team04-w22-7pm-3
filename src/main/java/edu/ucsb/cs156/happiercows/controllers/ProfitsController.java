@@ -148,7 +148,7 @@ public class ProfitsController extends ApiController {
     @ApiOperation(value = "Create a new profit for a specific UserCommons by ID (admin only))")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/admin/post")
-    public Profit creadProfitAdmin(
+    public Profit createProfitAdmin(
             @ApiParam("profit") @RequestParam long profit,
             @ApiParam("time") @RequestParam String time,
             @ApiParam("userCommonsId") @RequestParam long userCommonsId) {
