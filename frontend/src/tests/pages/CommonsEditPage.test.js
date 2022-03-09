@@ -1,7 +1,7 @@
 import { fireEvent, queryByTestId, render, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
-import AdminDisplayTableListEditPage from "main/pages/AdminDisplayTableListEditPage";
+import CommonsEditPage from "main/pages/CommonsEditPage";
 
 import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
 import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
@@ -32,7 +32,7 @@ jest.mock('react-router-dom', () => {
     };
 });
 
-describe("AdminDisplayTableListEditPage tests", () => {
+describe("CommonsEditPage tests", () => {
 
     describe("when the backend doesn't return a common", () => {
 
@@ -51,7 +51,7 @@ describe("AdminDisplayTableListEditPage tests", () => {
             const {getByText, queryByTestId} = render(
                 <QueryClientProvider client={queryClient}>
                     <MemoryRouter>
-                        <AdminDisplayTableListEditPage />
+                        <CommonsEditPage />
                     </MemoryRouter>
                 </QueryClientProvider>
             );
@@ -72,17 +72,19 @@ describe("AdminDisplayTableListEditPage tests", () => {
             axiosMock.onGet("/api/commons", { params: { id: 1 } }).reply(200, {
                 id: 1,
                 name: "Anika's Commons",
-                day: 5,
-                endDate: "6/11/2021",
-                totalPlayers: 50,
+                startDate: "6/10/2021",
+                //endDate: "6/11/2021",
+                startBalance: 1000,
+                milkPrice: 10,
                 cowPrice: 15,
             });
             axiosMock.onPut('/api/commons').reply(200, {
                 id: 1,
                 name: "Anika's Commons",
-                day: 5,
-                endDate: "6/11/2021",
-                totalPlayers: 50,
+                startDate: "6/10/2021",
+                //endDate: "6/11/2021",
+                startBalance: 1000,
+                milkPrice: 10,
                 cowPrice: 20,
             });
         });
@@ -92,7 +94,7 @@ describe("AdminDisplayTableListEditPage tests", () => {
             render(
                 <QueryClientProvider client={queryClient}>
                     <MemoryRouter>
-                        <UCSBDatesEditPage />
+                        <CommonsEditPage />
                     </MemoryRouter>
                 </QueryClientProvider>
             );
@@ -103,7 +105,7 @@ describe("AdminDisplayTableListEditPage tests", () => {
             const { getByTestId } = render(
                 <QueryClientProvider client={queryClient}>
                     <MemoryRouter>
-                        <AdminDisplayTableListEditPage />
+                        <CommonsEditPage />
                     </MemoryRouter>
                 </QueryClientProvider>
             );
@@ -125,23 +127,19 @@ describe("AdminDisplayTableListEditPage tests", () => {
             expect(cowPriceField).toHaveValue("15");
             expect(milkPriceField).toHaveValue("10");
             expect(startDateField).toHaveValue("6/10/2021");
-            //expect(submitButton).toHaveValue("Pi Day");
-
         });
 
         test("Changes when you click Update", async () => {
 
-
-
             const { getByTestId } = render(
                 <QueryClientProvider client={queryClient}>
                     <MemoryRouter>
-                        <AdminDisplayTableListEditPage />
+                        <CommonsEditPage />
                     </MemoryRouter>
                 </QueryClientProvider>
             );
 
-            await waitFor(() => expect(getByTestId("AdminDisplayTableListEditPage-name")).toBeInTheDocument());
+            await waitFor(() => expect(getByTestId("CreateCommonsForm-name")).toBeInTheDocument());
 
             const idField = getByTestId("CreateCommonsForm-id");
             const nameField = getByTestId("CreateCommonsForm-name");
@@ -165,7 +163,6 @@ describe("AdminDisplayTableListEditPage tests", () => {
             fireEvent.change(milkPriceField, { target: { value: 20 } })
             fireEvent.change(startDateField, { target: { value: "6/08/2021" } })
             
-
             fireEvent.click(submitButton);
 
             await waitFor(() => expect(mockToast).toBeCalled);
@@ -176,9 +173,12 @@ describe("AdminDisplayTableListEditPage tests", () => {
             expect(axiosMock.history.put.length).toBe(1); // times called
             expect(axiosMock.history.put[0].params).toEqual({ id: 1 });
             expect(axiosMock.history.put[0].data).toBe(JSON.stringify({
-                quarterYYYYQ: '20224',
-                name: "Christmas Morning",
-                localDateTime: "2022-12-25T08:00"
+                name: "Simon Yu's Commons",
+                startDate: "6/08/2021",
+                // "endDate": "6/11/2021",
+                startBalance: 1001,
+                milkPrice: 20,
+                cowPrice: 200,
             })); // posted object
 
         });
