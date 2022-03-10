@@ -27,13 +27,13 @@ export default function CommonsEditPage() {
     params: {
       id: common.id,
     },
-    data: {
+    data: common/*{
       milkPrice: common.milkPrice,
       name: common.name,
       cowPrice: common.cowPrice,
       startingBalance: common.startingBalance,
       startDate: common.startDate
-    }
+    }*/
   });
 
   const onSuccess = (common) => {

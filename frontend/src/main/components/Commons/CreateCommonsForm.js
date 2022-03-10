@@ -1,7 +1,7 @@
 import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 
-export default function CreateCommonsForm( props) {
+export default function CreateCommonsForm(props) {
   const { onSubmit } = props;
   const {
     register,
