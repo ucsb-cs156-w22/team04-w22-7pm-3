@@ -9,4 +9,12 @@ describe("Profits tests", () => {
             <Profits userCommons={userCommonsFixtures.oneUserCommons[0]} />
         );
     });
+
+    test("renders without crashing", () => {
+        render(
+            <Profits userCommons={userCommonsFixtures.oneUserCommons[0]} />
+        );
+        
+    });
+
 });
