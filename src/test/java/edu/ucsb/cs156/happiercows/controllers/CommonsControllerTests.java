@@ -1,6 +1,8 @@
 package edu.ucsb.cs156.happiercows.controllers;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import edu.ucsb.cs156.happiercows.ControllerTestCase;
+import edu.ucsb.cs156.happiercows.errors.EntityNotFoundException;
 import edu.ucsb.cs156.happiercows.repositories.UserRepository;
 import edu.ucsb.cs156.happiercows.repositories.CommonsRepository;
 import edu.ucsb.cs156.happiercows.repositories.UserCommonsRepository;
@@ -14,6 +16,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.http.MediaType;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,12 +26,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.eq;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Date;
 import java.util.List;
@@ -85,6 +84,67 @@ public class CommonsControllerTests extends ControllerTestCase {
     String responseString = response.getResponse().getContentAsString();
     Commons actualCommons = objectMapper.readValue(responseString, Commons.class);
     assertEquals(actualCommons, expectedCommons);
+  }
+
+  @WithMockUser(roles = { "USER" })
+  @Test
+  public void deleteCommonsTestAsUSER() throws Exception {
+    mockMvc.perform(delete("/api/commons/delete")).andExpect(status().is(403));
+  }
+
+  @WithMockUser(roles = { "ADMIN" })
+  @Test
+  public void deleteExistingCommonsTestAsADMIN() throws Exception {
+    final long testId = 1L;
+
+    String testName = "TestCommons";
+    double testCowPrice = 10.4;
+    double testMilkPrice = 5.6;
+    double testStartingBalance = 50.0;
+    Date testStartDate = new Date(1646687907L);
+    Date testEndDate = new Date(1846687907L);
+
+    Commons commons = Commons.builder()
+            .name(testName)
+            .cowPrice(testCowPrice)
+            .milkPrice(testMilkPrice)
+            .startingBalance(testStartingBalance)
+            .startDate(testStartDate)
+            .endDate(testEndDate)
+            .id(testId)
+            .build();
+
+    when(commonsRepository.findById(eq(testId))).thenReturn(Optional.of(commons));
+
+    MvcResult resp = mockMvc.perform(delete("/api/commons/delete?commonsId=1")
+                    .with(csrf()))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    verify(commonsRepository, times(1)).findById(testId);
+    verify(commonsRepository, times(1)).deleteById(testId);
+    assertEquals(String.format("commons with id %d deleted", 1), resp.getResponse().getContentAsString());
+  }
+
+  @WithMockUser(roles = { "ADMIN" })
+  @Test
+  public void deleteNonExistingCommonsTestAsADMIN() throws Exception {
+    final long testId = 1L;
+    when(commonsRepository.findById(eq(testId))).thenReturn(Optional.empty());
+
+    MvcResult response = mockMvc.perform(delete("/api/commons/delete?commonsId=1")
+                    .with(csrf()))
+            .andExpect(status().is(404))
+            .andReturn();
+
+    verify(commonsRepository, times(1)).findById(testId);
+    String responseJsonString = response.getResponse().getContentAsString();
+    ObjectNode responseJson = mapper.readValue(responseJsonString, ObjectNode.class);
+    String responseString = responseJson.get("message").asText();
+    String expectedString = (new EntityNotFoundException(Commons.class, testId)).getMessage();
+
+    assertEquals(expectedString, responseString);
+
   }
 
   @WithMockUser(roles = { "USER" })
