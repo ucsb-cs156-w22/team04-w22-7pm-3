@@ -99,7 +99,7 @@ public class CommonsController extends ApiController {
 
     commonsRepository.deleteById(commonsId);
 
-    return ResponseEntity.ok().body(String.format("Subject with id %d deleted", commonsId));
+    return ResponseEntity.ok().body(String.format("commons with id %d deleted", commonsId));
   }
 
   @ApiOperation(value = "Join a commons")
