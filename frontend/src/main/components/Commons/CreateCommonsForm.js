@@ -1,16 +1,31 @@
 import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 
-export default function CreateCommonsForm(props) {
-  const { onSubmit } = props;
+export default function CreateCommonsForm({initialCommon, submitAction, buttonLabel = "Create"}) {
+  const { onSubmit } = submitAction;
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({defaultValues: initialCommon || {} });
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
+
+      {initialCommon && (
+          <Form.Group className="mb-3" >
+              <Form.Label htmlFor="id">Id</Form.Label>
+              <Form.Control
+                  data-testid="CreateCommonsForm-id"
+                  id="id"
+                  type="text"
+                  {...register("id")}
+                  value={initialCommon.id}
+                  disabled
+              />
+          </Form.Group>
+      )}
+
       <Form.Group className="mb-3">
         <Form.Label htmlFor="name">Commons Name</Form.Label>
         <Form.Control
@@ -84,7 +99,7 @@ export default function CreateCommonsForm(props) {
 
       <Form.Group className="mb-3">
         <Form.Label htmlFor="startDate">Start Date</Form.Label>
-        <Form.Control
+        <Form.Control 
           data-test-id="CreateCommonsForm-startdate"
           id="startDate"
           type="date"
@@ -100,7 +115,10 @@ export default function CreateCommonsForm(props) {
           {errors.startDate?.message}
         </Form.Control.Feedback>
       </Form.Group>
-      <Button type="submit" data-testid="CreateCommonsForm-Create-Button">Create</Button>
+      <Button type="submit" data-testid="CreateCommonsForm-Create-Button">
+        {buttonLabel}
+      </Button>
+
     </Form>
   );
 }

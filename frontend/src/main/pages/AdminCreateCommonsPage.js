@@ -41,7 +41,7 @@ const AdminCreateCommonsPage = () => {
         <BasicLayout>
             <h2>Create Commons</h2>
             <CreateCommonsForm
-                onSubmit={onSubmit}
+                submitAction={onSubmit}
             />
         </BasicLayout>
     );
