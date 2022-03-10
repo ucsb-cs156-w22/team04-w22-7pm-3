@@ -1,11 +1,11 @@
-import { render } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
 import CommonsTableListPage from "main/pages/CommonsTableListPage";
 
 import { apiCurrentUserFixtures }  from "fixtures/currentUserFixtures";
 import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
-import { commonsFixtures } from "fixtures/commonsFixtures";
+import commonsFixtures from "fixtures/commonsFixtures";
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
 import mockConsole from "jest-mock-console";
@@ -52,9 +52,9 @@ describe("CommonsTableListPage tests", () => {
             </QueryClientProvider>
         );
 
-        await waitFor(() => { expect(getByTestId(`${testId}-cell-row-0-col-id`)).toHaveTextContent("5"); });
-        expect(getByTestId(`${testId}-cell-row-1-col-id`)).toHaveTextContent("4")
-        expect(getByTestId(`${testId}-cell-row-2-col-id`)).toHaveTextContent("1");
+        await waitFor(() => { expect(getByTestId(`${testId}-cell-row-0-col-name`)).toHaveTextContent("Seths Common"); });
+        expect(getByTestId(`${testId}-cell-row-1-col-name`)).toHaveTextContent("Elizabeth's Commons")
+        expect(getByTestId(`${testId}-cell-row-2-col-name`)).toHaveTextContent("Vicky's Commons");
     });
 
     test("renders empty table when backend unavailable", async () => {
