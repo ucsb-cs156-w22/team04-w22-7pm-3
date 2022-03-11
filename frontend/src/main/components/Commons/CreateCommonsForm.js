@@ -2,7 +2,6 @@ import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 
 export default function CreateCommonsForm({initialCommon, submitAction, buttonLabel = "Create"}) {
-  const { onSubmit } = submitAction;
   const {
     register,
     handleSubmit,
@@ -12,7 +11,7 @@ export default function CreateCommonsForm({initialCommon, submitAction, buttonLa
     );
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit(submitAction)}>
 
       {initialCommon && (
           <Form.Group className="mb-3" >
@@ -107,6 +106,7 @@ export default function CreateCommonsForm({initialCommon, submitAction, buttonLa
           type="date"
           // defaultValue={initialCommon.startDate.substr(0,10)}
           //defaultValue={"2022-01-01"}
+          
           isInvalid={!!errors.startDate}
           {...register("startDate", {
             valueAsDate: true,
@@ -114,6 +114,7 @@ export default function CreateCommonsForm({initialCommon, submitAction, buttonLa
               isPresent: (v) => !isNaN(v) || "Start date is required",
             },            
           })}
+          
         />
         <Form.Control.Feedback type="invalid">
           {errors.startDate?.message}
