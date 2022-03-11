@@ -74,7 +74,7 @@ describe("CommonsEditPage tests", () => {
                 name: "Anika's Commons",
                 startDate: "6/10/2021",
                 //endDate: "6/11/2021",
-                startBalance: 1000,
+                startingBalance: 1000,
                 milkPrice: 10,
                 cowPrice: 15,
             });
@@ -123,9 +123,9 @@ describe("CommonsEditPage tests", () => {
 
             expect(idField).toHaveValue("17");
             expect(nameField).toHaveValue("Anika's Commons");
-            expect(balanceField).toHaveValue("1000");
-            expect(cowPriceField).toHaveValue("15");
-            expect(milkPriceField).toHaveValue("10");
+            expect(balanceField).toHaveValue(1000);
+            expect(cowPriceField).toHaveValue(15);
+            expect(milkPriceField).toHaveValue(10);
             expect(startDateField).toHaveValue("6/10/2021");
         });
 
@@ -150,9 +150,9 @@ describe("CommonsEditPage tests", () => {
 
             expect(idField).toHaveValue("17");
             expect(nameField).toHaveValue("Anika's Commons");
-            expect(balanceField).toHaveValue("1000");
-            expect(cowPriceField).toHaveValue("15");
-            expect(milkPriceField).toHaveValue("10");
+            expect(balanceField).toHaveValue(1000);
+            expect(cowPriceField).toHaveValue(15);
+            expect(milkPriceField).toHaveValue(10);
             expect(startDateField).toHaveValue("6/10/2021");
 
             expect(submitButton).toBeInTheDocument();
