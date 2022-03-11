@@ -13,6 +13,8 @@ import edu.ucsb.cs156.happiercows.entities.UserCommons;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.http.MediaType;
@@ -27,13 +29,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 
-import java.util.Date;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.Exchanger;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriTemplateHandler;
 
 @WebMvcTest(controllers = CommonsController.class)
 public class CommonsControllerTests extends ControllerTestCase {
@@ -71,11 +75,21 @@ public class CommonsControllerTests extends ControllerTestCase {
     String requestBody = mapper.writeValueAsString(expectedCommons);
     when(commonsRepository.save(any())).thenReturn(expectedCommons);
 
+    Map<String, String> uriVariables = Map.of("name", testName,
+            "cowPrice", testCowPrice + "",
+            "milkPrice", testMilkPrice + "",
+            "startingBalance", testStartingBalance + "",
+            "startDate", testStartDate.toString(),
+            "endDate", testEndDate.toString());
+
+    String URI = UriComponentsBuilder.newInstance()
+            .path("/api/commons/new")
+            .query("cowPrice").query("milkPrice").query("startingBalance").query("startDate").query("endDate")
+            .buildAndExpand(uriVariables)
+            .toUriString();
+
     MvcResult response = mockMvc
-        .perform(post(
-                String.format("/api/commons/new?name=%s?cowPrice=%f?milkPrice=%f?startingBalance=%f?startDate=%s?endDate=%s",
-                        testName, testCowPrice, testMilkPrice, testStartingBalance, testStartDate, testEndDate)
-        ).with(csrf()).contentType(MediaType.APPLICATION_JSON)
+        .perform(post(URI).with(csrf()).contentType(MediaType.APPLICATION_JSON)
             .characterEncoding("utf-8").content(requestBody))
         .andExpect(status().isOk()).andReturn();
 
