@@ -7,7 +7,7 @@ export default function CreateCommonsForm({initialCommon, submitAction, buttonLa
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({defaultValues: initialCommon || {} });
+  } = useForm({defaultValues: {...initialCommon, startDate: initialCommon.startDate.substr(0,10)} });
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -103,6 +103,8 @@ export default function CreateCommonsForm({initialCommon, submitAction, buttonLa
           data-test-id="CreateCommonsForm-startdate"
           id="startDate"
           type="date"
+          // defaultValue={initialCommon.startDate.substr(0,10)}
+          defaultValue={"2022-01-01"}
           isInvalid={!!errors.startDate}
           {...register("startDate", {
             valueAsDate: true,
