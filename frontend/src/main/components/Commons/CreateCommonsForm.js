@@ -7,7 +7,9 @@ export default function CreateCommonsForm({initialCommon, submitAction, buttonLa
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({defaultValues: {...initialCommon, startDate: initialCommon.startDate.substr(0,10)} });
+  } = useForm(
+    {defaultValues: {...initialCommon, startDate: initialCommon?.startDate.substr(0,10)} || {}}
+    );
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
