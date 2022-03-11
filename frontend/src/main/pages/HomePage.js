@@ -80,8 +80,9 @@ export default function HomePage() {
         <BasicLayout>
           <h1 data-testid="homePage-title" style={{ fontSize: "75px", borderRadius: "7px", backgroundColor: "white", opacity: ".9" }} className="text-center border-0 my-3">Howdy Farmer</h1>
           <Container>
+          <h1 data-testid="login-prompt" style={{ fontSize: "40px", borderRadius: "7px", backgroundColor: "white", opacity: ".9" }} className="text-center border-0 my-3">Log in to participate in Happier Cows!</h1>
             <Row>
-              <Col sm><CommonsList commonList={commonsJoined}/></Col>
+              <Col sm><CommonsList commonList={commonsJoined} /></Col>
               <Col sm><CommonsList commonList={commons}/></Col>
             </Row>
           </Container>
