@@ -55,7 +55,7 @@ export default function CommonsEditPage() {
   }
 
   if (isSuccess) {
-    return <Navigate to="/commons/displaytable" />
+    return <Navigate to="/admin/listcommons" />
   }
 
   return (
