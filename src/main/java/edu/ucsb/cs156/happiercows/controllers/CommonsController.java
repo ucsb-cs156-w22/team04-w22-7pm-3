@@ -46,7 +46,6 @@ public class CommonsController extends ApiController {
   ObjectMapper mapper;
 
   @ApiOperation(value = "Get a list of all commons")
-  @PreAuthorize("hasRole('ROLE_USER')")
   @GetMapping("/all")
   public ResponseEntity<String> getCommons() throws JsonProcessingException {
     log.info("getCommons()...");
@@ -54,6 +53,7 @@ public class CommonsController extends ApiController {
     String body = mapper.writeValueAsString(users);
     return ResponseEntity.ok().body(body);
   }
+
 
   @ApiOperation(value = "Get a specific commons")
   @PreAuthorize("hasRole('ROLE_USER')")
@@ -73,7 +73,14 @@ public class CommonsController extends ApiController {
   public ResponseEntity<String> createCommons(@ApiParam("name of commons") @RequestBody CreateCommonsParams params)
       throws JsonProcessingException {
     log.info("name={}", params.getName());
-    Commons c = Commons.builder().name(params.getName()).build();
+    Commons c = Commons.builder()
+            .name(params.getName())
+            .cowPrice(params.getCowPrice())
+            .milkPrice(params.getMilkPrice())
+            .startingBalance(params.getStartingBalance())
+            .startDate(params.getStartDate())
+            .endDate(params.getEndDate())
+            .build();
     Commons savedCommons = commonsRepository.save(c);
     String body = mapper.writeValueAsString(savedCommons);
     log.info("body={}", body);
