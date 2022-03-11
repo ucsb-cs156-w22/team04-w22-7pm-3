@@ -111,6 +111,7 @@ public class CommonsController extends ApiController {
         .commonsId(commonsId)
         .userId(userId)
         .totalWealth(0)
+        .avgCowHealth(100.0)
         .build();
 
     userCommonsRepository.save(uc);
