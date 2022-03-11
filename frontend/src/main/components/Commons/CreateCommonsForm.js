@@ -106,7 +106,7 @@ export default function CreateCommonsForm({initialCommon, submitAction, buttonLa
           id="startDate"
           type="date"
           // defaultValue={initialCommon.startDate.substr(0,10)}
-          defaultValue={"2022-01-01"}
+          //defaultValue={"2022-01-01"}
           isInvalid={!!errors.startDate}
           {...register("startDate", {
             valueAsDate: true,
