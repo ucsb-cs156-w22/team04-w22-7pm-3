@@ -5,7 +5,7 @@ import CreateCommonsForm from "main/components/Commons/CreateCommonsForm";
 describe(CreateCommonsForm, () => {
   it("has validation errors for required fields", async () => {
     const onSubmit = jest.fn();
-    await act(async () => render(<CreateCommonsForm onSubmit={onSubmit} />));
+    await act(async () => render(<CreateCommonsForm submitAction={onSubmit} />));
 
     userEvent.click(screen.getByRole("button"));
 
@@ -20,7 +20,8 @@ describe(CreateCommonsForm, () => {
 
   it("calls the onSubmit callback with valid inputs", async () => {
     const onSubmit = jest.fn();
-    await act(async () => render(<CreateCommonsForm onSubmit={onSubmit} />));
+    await act(async () => render(<CreateCommonsForm submitAction={onSubmit} />));
+  
 
     userEvent.type(screen.getByLabelText(/commons name/i), "Test");
     userEvent.type(screen.getByLabelText(/starting balance/i), "1000.00");

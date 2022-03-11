@@ -69,8 +69,8 @@ describe("CommonsEditPage tests", () => {
             axiosMock.resetHistory();
             axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.userOnly);
             axiosMock.onGet("/api/systemInfo").reply(200, systemInfoFixtures.showingNeither);
-            axiosMock.onGet("/api/commons", { params: { id: 1 } }).reply(200, {
-                id: 1,
+            axiosMock.onGet("/api/commons", { params: { id: 17 } }).reply(200, {
+                id: 17,
                 name: "Anika's Commons",
                 startDate: "6/10/2021",
                 //endDate: "6/11/2021",
@@ -79,11 +79,11 @@ describe("CommonsEditPage tests", () => {
                 cowPrice: 15,
             });
             axiosMock.onPut('/api/commons').reply(200, {
-                id: 1,
+                id: 17,
                 name: "Anika's Commons",
                 startDate: "6/10/2021",
                 //endDate: "6/11/2021",
-                startBalance: 1000,
+                startingBalance: 1000,
                 milkPrice: 10,
                 cowPrice: 20,
             });
@@ -121,7 +121,7 @@ describe("CommonsEditPage tests", () => {
             
             const submitButton = getByTestId("CreateCommonsForm-submit");
 
-            expect(idField).toHaveValue("1");
+            expect(idField).toHaveValue("17");
             expect(nameField).toHaveValue("Anika's Commons");
             expect(balanceField).toHaveValue("1000");
             expect(cowPriceField).toHaveValue("15");
@@ -148,7 +148,7 @@ describe("CommonsEditPage tests", () => {
             const milkPriceField = getByTestId("CreateCommonsForm-milkprice");
             const startDateField = getByTestId("CreateCommonsForm-startdate");
 
-            expect(idField).toHaveValue("1");
+            expect(idField).toHaveValue("17");
             expect(nameField).toHaveValue("Anika's Commons");
             expect(balanceField).toHaveValue("1000");
             expect(cowPriceField).toHaveValue("15");
@@ -166,17 +166,17 @@ describe("CommonsEditPage tests", () => {
             fireEvent.click(submitButton);
 
             await waitFor(() => expect(mockToast).toBeCalled);
-            expect(mockToast).toBeCalledWith("Common Updated - id: 1 name: Simon Yu's");
+            expect(mockToast).toBeCalledWith("Common Updated - id: 17 name: Simon Yu's");
             expect(mockNavigate).toBeCalledWith({ "to": "/commons/list" });
 
 
             expect(axiosMock.history.put.length).toBe(1); // times called
-            expect(axiosMock.history.put[0].params).toEqual({ id: 1 });
+            expect(axiosMock.history.put[0].params).toEqual({ id: 17 });
             expect(axiosMock.history.put[0].data).toBe(JSON.stringify({
                 name: "Simon Yu's Commons",
                 startDate: "6/08/2021",
                 // "endDate": "6/11/2021",
-                startBalance: 1001,
+                startingBalance: 1001,
                 milkPrice: 20,
                 cowPrice: 200,
             })); // posted object

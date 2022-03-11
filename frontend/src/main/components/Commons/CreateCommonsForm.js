@@ -7,7 +7,7 @@ export default function CreateCommonsForm({initialCommon, submitAction, buttonLa
     handleSubmit,
     formState: { errors },
   } = useForm(
-    {defaultValues: {...initialCommon, startDate: initialCommon?.startDate.substr(0,10)} || {}}
+    {defaultValues: {...initialCommon, startDate: initialCommon?.startDate?.substr(0,10)} || {}}
     );
 
   return (
@@ -30,7 +30,7 @@ export default function CreateCommonsForm({initialCommon, submitAction, buttonLa
       <Form.Group className="mb-3">
         <Form.Label htmlFor="name">Commons Name</Form.Label>
         <Form.Control
-          data-test-id="CreateCommonsForm-name"
+          data-testid="CreateCommonsForm-name"
           id="name"
           type="text"
           isInvalid={!!errors.name}
@@ -44,7 +44,7 @@ export default function CreateCommonsForm({initialCommon, submitAction, buttonLa
       <Form.Group className="mb-3">
         <Form.Label htmlFor="startingBalance">Starting Balance</Form.Label>
         <Form.Control
-          data-test-id="CreateCommonsForm-startbal"
+          data-testid="CreateCommonsForm-startbal"
           id="startingBalance"
           type="number"
           step="0.01"
@@ -63,7 +63,7 @@ export default function CreateCommonsForm({initialCommon, submitAction, buttonLa
       <Form.Group className="mb-3">
         <Form.Label htmlFor="cowPrice">Cow Price</Form.Label>
         <Form.Control
-          data-test-id="CreateCommonsForm-cowprice"
+          data-testid="CreateCommonsForm-cowprice"
           id="cowPrice"
           type="number"
           step="0.01"
@@ -82,7 +82,7 @@ export default function CreateCommonsForm({initialCommon, submitAction, buttonLa
       <Form.Group className="mb-3">
         <Form.Label htmlFor="milkPrice">Milk Price</Form.Label>
         <Form.Control
-          data-test-id="CreateCommonsForm-milkprice"
+          data-testid="CreateCommonsForm-milkprice"
           id="milkPrice"
           type="number"
           step="0.01"
@@ -101,7 +101,7 @@ export default function CreateCommonsForm({initialCommon, submitAction, buttonLa
       <Form.Group className="mb-3">
         <Form.Label htmlFor="startDate">Start Date</Form.Label>
         <Form.Control 
-          data-test-id="CreateCommonsForm-startdate"
+          data-testid="CreateCommonsForm-startdate"
           id="startDate"
           type="date"
           // defaultValue={initialCommon.startDate.substr(0,10)}
@@ -120,7 +120,7 @@ export default function CreateCommonsForm({initialCommon, submitAction, buttonLa
           {errors.startDate?.message}
         </Form.Control.Feedback>
       </Form.Group>
-      <Button type="submit" data-testid="CreateCommonsForm-Create-Button">
+      <Button type="submit" data-testid="CreateCommonsForm-submit">
         {buttonLabel}
       </Button>
 
