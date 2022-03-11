@@ -30,6 +30,7 @@ describe("PlayPage tests", () => {
             commonsId: 1,
             id: 1,
             totalWealth: 0,
+            avgCowHealth: 100.0,
             userId: 1
         });
         axiosMock.onGet("/api/commons", { params: { id: 1 } }).reply(200, {
