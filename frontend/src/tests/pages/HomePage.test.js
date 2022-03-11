@@ -32,24 +32,9 @@ describe("HomePage tests", () => {
         );
 
         const title = getByTestId("homePage-title");
-        expect(title).not.toBeInTheDocument();
+        expect(title).toBeInTheDocument();
         expect(typeof (title.textContent)).toBe('string');
         expect(title.textContent).toEqual('Howdy Farmer');
-    });
-
-    test("Login users do not see login prompt", () => {
-        axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.userOnly);
-        axiosMock.onGet("/api/commons/all").reply(200, []);
-        const { getByTestId } = render(
-            <QueryClientProvider client={queryClient}>
-                <MemoryRouter>
-                    <HomePage />
-                </MemoryRouter>
-            </QueryClientProvider>
-        );
-
-        const title = getByTestId("login-prompt");
-        expect(title).not.toBeInTheDocument();
     });
 
     test("renders without crashing when lists are full", () => {
