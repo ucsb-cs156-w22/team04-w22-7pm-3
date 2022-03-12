@@ -72,7 +72,7 @@ describe("CommonsEditPage tests", () => {
             axiosMock.onGet("/api/commons", { params: { id: 17 } }).reply(200, {
                 id: 17,
                 name: "Anika's Commons",
-                startDate: "6/10/2021",
+                startDate: '2022-05-12',
                 //endDate: "6/11/2021",
                 startingBalance: 1000,
                 milkPrice: 10,
@@ -81,7 +81,7 @@ describe("CommonsEditPage tests", () => {
             axiosMock.onPut('/api/commons').reply(200, {
                 id: 17,
                 name: "Anika's Commons",
-                startDate: "6/10/2021",
+                startDate: '2022-05-12',
                 //endDate: "6/11/2021",
                 startingBalance: 1000,
                 milkPrice: 10,
@@ -126,7 +126,7 @@ describe("CommonsEditPage tests", () => {
             expect(balanceField).toHaveValue(1000);
             expect(cowPriceField).toHaveValue(15);
             expect(milkPriceField).toHaveValue(10);
-            expect(startDateField).toHaveValue("6/10/2021");
+            expect(startDateField).toHaveValue('2022-05-12');
         });
 
         test("Changes when you click Update", async () => {
@@ -153,32 +153,32 @@ describe("CommonsEditPage tests", () => {
             expect(balanceField).toHaveValue(1000);
             expect(cowPriceField).toHaveValue(15);
             expect(milkPriceField).toHaveValue(10);
-            expect(startDateField).toHaveValue("6/10/2021");
+            expect(startDateField).toHaveValue('2022-05-12');
+
+            const submitButton = getByTestId("CreateCommonsForm-submit");
 
             expect(submitButton).toBeInTheDocument();
 
-            fireEvent.change(nameField, { target: { value: "Simon Yu's" } })
+            fireEvent.change(nameField, { target: { value: "Simon Yu" } })
             fireEvent.change(balanceField, { target: { value: 1001 } })
             fireEvent.change(cowPriceField, { target: { value: 200 } })
             fireEvent.change(milkPriceField, { target: { value: 20 } })
-            fireEvent.change(startDateField, { target: { value: "6/08/2021" } })
+            fireEvent.change(startDateField, { target: { value: '2022-06-12' } })
             
             fireEvent.click(submitButton);
 
             await waitFor(() => expect(mockToast).toBeCalled);
-            expect(mockToast).toBeCalledWith("Common Updated - id: 17 name: Simon Yu's");
-            expect(mockNavigate).toBeCalledWith({ "to": "/commons/list" });
-
+            expect(mockToast).toBeCalledWith("Common Updated - id: 17 name: Simon Yu");
+            expect(mockNavigate).toBeCalledWith({ "to": "/admin/listcommons" });
 
             expect(axiosMock.history.put.length).toBe(1); // times called
             expect(axiosMock.history.put[0].params).toEqual({ id: 17 });
             expect(axiosMock.history.put[0].data).toBe(JSON.stringify({
-                name: "Simon Yu's Commons",
-                startDate: "6/08/2021",
-                // "endDate": "6/11/2021",
-                startingBalance: 1001,
                 milkPrice: 20,
+                name: "Simon Yu",
                 cowPrice: 200,
+                startingBalance: 1001,
+                startDate: '2022-06-12T00:00:00.000Z',              
             })); // posted object
 
         });
