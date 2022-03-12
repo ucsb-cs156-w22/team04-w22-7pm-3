@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.validation.Valid;
+
 @Slf4j
 @Api(description = "Commons")
 @RequestMapping("/api/commons")
@@ -44,6 +47,16 @@ public class CommonsController extends ApiController {
 
   @Autowired
   ObjectMapper mapper;
+
+  private static class CommonsOrError {
+    Long id;
+    Commons commons;
+    ResponseEntity<String> error;
+
+    public CommonsOrError(Long id) {
+      this.id = id;
+    }
+  }
 
   @ApiOperation(value = "Get a list of all commons")
   @PreAuthorize("hasRole('ROLE_USER')")
@@ -74,13 +87,13 @@ public class CommonsController extends ApiController {
       throws JsonProcessingException {
     log.info("name={}", params.getName());
     Commons c = Commons.builder()
-            .name(params.getName())
-            .cowPrice(params.getCowPrice())
-            .milkPrice(params.getMilkPrice())
-            .startingBalance(params.getStartingBalance())
-            .startDate(params.getStartDate())
-            .endDate(params.getEndDate())
-            .build();
+        .name(params.getName())
+        .cowPrice(params.getCowPrice())
+        .milkPrice(params.getMilkPrice())
+        .startingBalance(params.getStartingBalance())
+        .startDate(params.getStartDate())
+        .endDate(params.getEndDate())
+        .build();
     Commons savedCommons = commonsRepository.save(c);
     String body = mapper.writeValueAsString(savedCommons);
     log.info("body={}", body);
@@ -100,7 +113,8 @@ public class CommonsController extends ApiController {
 
     if (userCommonsLookup.isPresent()) {
       // user is already a member of this commons
-      Commons joinedCommons = commonsRepository.findById(commonsId).orElseThrow( ()->new EntityNotFoundException(Commons.class, commonsId));
+      Commons joinedCommons = commonsRepository.findById(commonsId)
+          .orElseThrow(() -> new EntityNotFoundException(Commons.class, commonsId));
       String body = mapper.writeValueAsString(joinedCommons);
       return ResponseEntity.ok().body(body);
     }
@@ -113,7 +127,8 @@ public class CommonsController extends ApiController {
 
     userCommonsRepository.save(uc);
 
-    Commons joinedCommons = commonsRepository.findById(commonsId).orElseThrow( ()->new EntityNotFoundException(Commons.class, commonsId));
+    Commons joinedCommons = commonsRepository.findById(commonsId)
+        .orElseThrow(() -> new EntityNotFoundException(Commons.class, commonsId));
     String body = mapper.writeValueAsString(joinedCommons);
     return ResponseEntity.ok().body(body);
   }
@@ -130,5 +145,45 @@ public class CommonsController extends ApiController {
 
     userCommonsRepository.deleteById(userCommons.getId());
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
+
+  @ApiOperation(value = "Edit a pre-existing commons")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @PutMapping("")
+  public ResponseEntity<String> updateCommons(
+      @RequestParam Long id,
+      @RequestBody @Valid Commons incoming) throws JsonProcessingException {
+    CommonsOrError coe = new CommonsOrError(id);
+    coe = doesCommonsExist(coe);
+    if (coe.error != null) {
+      return coe.error;
+    }
+
+    Commons oldCommon = coe.commons;
+    oldCommon.setName(incoming.getName());
+    oldCommon.setCowPrice(incoming.getCowPrice());
+    oldCommon.setMilkPrice(incoming.getMilkPrice());
+    oldCommon.setStartingBalance(incoming.getStartingBalance());
+    oldCommon.setStartDate(incoming.getStartDate());
+    oldCommon.setEndDate(incoming.getEndDate());
+
+    commonsRepository.save(oldCommon);
+
+    String body = mapper.writeValueAsString(oldCommon);
+    return ResponseEntity.ok().body(body);
+  }
+
+  public CommonsOrError doesCommonsExist(CommonsOrError coe) {
+
+    Optional<Commons> optionalCommons = commonsRepository.findById(coe.id);
+
+    if (optionalCommons.isEmpty()) {
+      coe.error = ResponseEntity
+          .badRequest()
+          .body(String.format("Commons with id %d not found", coe.id));
+    } else {
+      coe.commons = optionalCommons.get();
+    }
+    return coe;
   }
 }
