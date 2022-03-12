@@ -172,38 +172,10 @@ public class CommonsController extends ApiController {
     userCommonsRepository.deleteById(userCommons.getId());
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
-<<<<<<< HEAD
-=======
-
->>>>>>> 191241d607e0512bac0696991057719d1fac1ef6
   @ApiOperation(value = "Edit a pre-existing commons")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PutMapping("")
   public ResponseEntity<String> updateCommons(
-<<<<<<< HEAD
-    @RequestParam Long id,
-    @RequestBody @Valid Commons incoming) throws JsonProcessingException {
-      CommonsOrError coe = new CommonsOrError(id);
-      coe = doesCommonsExist(coe);
-      if (coe.error != null) {
-          return coe.error;
-      }
-
-      Commons oldCommon = coe.commons;
-      oldCommon.setName(incoming.getName());
-      oldCommon.setCowPrice(incoming.getCowPrice());
-      oldCommon.setMilkPrice(incoming.getMilkPrice());
-      oldCommon.setStartingBalance(incoming.getStartingBalance());
-      oldCommon.setStartDate(incoming.getStartDate());
-      oldCommon.setEndDate(incoming.getEndDate());
-
-      commonsRepository.save(oldCommon);
-
-      String body = mapper.writeValueAsString(oldCommon);
-      return ResponseEntity.ok().body(body);
-  }
-  
-=======
       @RequestParam Long id,
       @RequestBody @Valid Commons incoming) throws JsonProcessingException {
     CommonsOrError coe = new CommonsOrError(id);
@@ -226,22 +198,11 @@ public class CommonsController extends ApiController {
     return ResponseEntity.ok().body(body);
   }
 
->>>>>>> 191241d607e0512bac0696991057719d1fac1ef6
   public CommonsOrError doesCommonsExist(CommonsOrError coe) {
 
     Optional<Commons> optionalCommons = commonsRepository.findById(coe.id);
 
     if (optionalCommons.isEmpty()) {
-<<<<<<< HEAD
-        coe.error = ResponseEntity
-                .badRequest()
-                .body(String.format("Commons with id %d not found", coe.id));
-    } else {
-        coe.commons = optionalCommons.get();
-    }
-    return coe;
-}
-=======
       coe.error = ResponseEntity
           .badRequest()
           .body(String.format("Commons with id %d not found", coe.id));
@@ -250,5 +211,4 @@ public class CommonsController extends ApiController {
     }
     return coe;
   }
->>>>>>> 191241d607e0512bac0696991057719d1fac1ef6
 }
