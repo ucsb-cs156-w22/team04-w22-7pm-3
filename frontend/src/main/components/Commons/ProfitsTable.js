@@ -24,7 +24,7 @@ export default function ProfitsTable({ profits }) {
             },
             {
                 Header: "Date",
-                accessor: "date",
+                accessor: "time",
             }
         ], 
     []);
