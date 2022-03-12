@@ -1,5 +1,6 @@
 import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import { useNavigate } from 'react-router-dom'
 
 export default function CreateCommonsForm({initialCommon, submitAction, buttonLabel = "Create"}) {
   const {
@@ -10,6 +11,9 @@ export default function CreateCommonsForm({initialCommon, submitAction, buttonLa
     {defaultValues: {...initialCommon, startDate: initialCommon?.startDate?.substr(0,10)} || {}}
     );
 
+
+  const navigate = useNavigate();
+  
   return (
     <Form onSubmit={handleSubmit(submitAction)}>
 
@@ -122,6 +126,9 @@ export default function CreateCommonsForm({initialCommon, submitAction, buttonLa
       </Form.Group>
       <Button type="submit" data-testid="CreateCommonsForm-submit">
         {buttonLabel}
+      </Button>
+      <Button variant="Secondary" onClick={() => navigate(-1)} data-testid="CreateCommonsForm-cancel">
+        Cancel
       </Button>
 
     </Form>
