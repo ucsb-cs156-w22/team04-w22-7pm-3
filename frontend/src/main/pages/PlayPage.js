@@ -75,7 +75,7 @@ export default function PlayPage() {
   const buyMutation = useBackendMutation(
     cellToAxiosParamsIncrement,
     { onIncrementSuccess },
-    [`/api/usercommons/forcurrentuser/decrementCows?commonsId=${commonsId}`]
+    [`/api/usercommons/forcurrentuser/incrementCows?commonsId=${commonsId}`]
   )
 
   
