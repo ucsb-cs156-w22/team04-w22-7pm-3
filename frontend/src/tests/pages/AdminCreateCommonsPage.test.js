@@ -7,7 +7,15 @@ import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
 
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
-
+const mockToast = jest.fn();
+jest.mock('react-toastify', () => {
+    const originalModule = jest.requireActual('react-toastify');
+    return {
+        __esModule: true,
+        ...originalModule,
+        toast: (x) => mockToast(x)
+    };
+});
 
 const mockedNavigate = jest.fn();
 jest.mock('react-router-dom', () => {
@@ -73,6 +81,7 @@ describe("AdminCreateCommonsPage tests", () => {
         const cowPriceField = getByLabelText("Cow Price");
         const milkPriceField = getByLabelText("Milk Price");
         const startDateField = getByLabelText("Start Date");
+        const endDateField = getByLabelText("End Date");
         const button = getByTestId("CreateCommonsForm-Create-Button");
 
 
@@ -81,8 +90,10 @@ describe("AdminCreateCommonsPage tests", () => {
         fireEvent.change(cowPriceField, { target: { value: '10' } })
         fireEvent.change(milkPriceField, { target: { value: '5' } })
         fireEvent.change(startDateField, { target: { value: '2022-05-12' } })
+        fireEvent.change(endDateField, { target: { value: '2022-06-12' } })
         fireEvent.click(button);
 
+        await waitFor(() => { expect(mockToast).toBeCalledWith(`Commons successfully created! - id: 5 name: Seths Common`); });
         await waitFor(() => expect(axiosMock.history.post.length).toBe(1));
 
         const expectedCommons = {
@@ -90,7 +101,8 @@ describe("AdminCreateCommonsPage tests", () => {
             startingBalance: 500,
             cowPrice: 10,
             milkPrice: 5,
-            startDate: '2022-05-12T00:00:00.000Z'
+            startDate: '2022-05-12T00:00:00.000Z',
+            endDate: '2022-06-12T00:00:00.000Z'
         };
 
         expect(axiosMock.history.post[0].data).toEqual( JSON.stringify(expectedCommons) );

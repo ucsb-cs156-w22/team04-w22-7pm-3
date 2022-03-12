@@ -14,7 +14,28 @@ describe(CreateCommonsForm, () => {
     expect(await screen.findByText(/cow price is required/i)).toBeInTheDocument();
     expect(await screen.findByText(/milk price is required/i)).toBeInTheDocument();
     expect(await screen.findByText(/start date is required/i)).toBeInTheDocument();
+    expect(await screen.findByText(/end date is required/i)).toBeInTheDocument();
+    expect(onSubmit).not.toBeCalled();
+  });
 
+  it("has validation errors when inputs are not valid", async () => {
+    const onSubmit = jest.fn();
+    await act(async () => render(<CreateCommonsForm onSubmit={onSubmit} />));
+
+    userEvent.type(screen.getByLabelText(/commons name/i), "Test");
+    userEvent.type(screen.getByLabelText(/starting balance/i), "-1");
+    userEvent.type(screen.getByLabelText(/cow price/i), "-2");
+    userEvent.type(screen.getByLabelText(/milk price/i), "0");
+    userEvent.type(screen.getByLabelText(/start date/i), "2021-13-01");
+    userEvent.type(screen.getByLabelText(/end date/i), "2021-13-01");
+    userEvent.click(screen.getByRole("button"));
+
+    //expect(await screen.findByText(/commons name is required/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Starting Balance must be positive/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Cow price must be positive/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Milk price must be positive/i)).toBeInTheDocument();
+    expect(await screen.findByText(/start date is required/i)).toBeInTheDocument();
+    expect(await screen.findByText(/end date is required/i)).toBeInTheDocument();
     expect(onSubmit).not.toBeCalled();
   });
 
@@ -27,6 +48,7 @@ describe(CreateCommonsForm, () => {
     userEvent.type(screen.getByLabelText(/cow price/i), "99.95");
     userEvent.type(screen.getByLabelText(/milk price/i), "5.99");
     userEvent.type(screen.getByLabelText(/start date/i), "2021-01-01");
+    userEvent.type(screen.getByLabelText(/end date/i), "2021-02-01");
     userEvent.click(screen.getByRole("button"));
 
     await waitFor(() => expect(onSubmit).toBeCalledTimes(1));
@@ -36,6 +58,7 @@ describe(CreateCommonsForm, () => {
       cowPrice: 99.95,
       milkPrice: 5.99,
       startDate: new Date("2021-01-01"),
+      endDate: new Date("2021-02-01"),
     });
   });
 });
