@@ -5,6 +5,7 @@ import ProfilePage from "main/pages/ProfilePage";
 import AdminUsersPage from "main/pages/AdminUsersPage";
 import AdminCreateCommonsPage from "main/pages/AdminCreateCommonsPage";
 import CommonsEditPage from "main/pages/CommonsEditPage";
+import CommonsTableListPage from "main/pages/CommonsTableListPage"
 import { hasRole, useCurrentUser } from "main/utils/currentUser";
 import PlayPage from "main/pages/PlayPage"; 
 
@@ -26,6 +27,9 @@ function App() {
           }
           {
             hasRole(currentUser, "ROLE_ADMIN") && <Route path="/admin/edit/:id" element={<CommonsEditPage />} />
+          }
+          {
+            hasRole(currentUser, "ROLE_ADMIN") && <Route path="/admin/listcommons" element={<CommonsTableListPage />} />
           }
           <Route path="/play/:commonsId" element={<PlayPage />} /> 
         </Routes>

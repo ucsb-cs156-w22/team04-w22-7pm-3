@@ -58,8 +58,17 @@ public class CommonsController extends ApiController {
   @Autowired
   ObjectMapper mapper;
 
+  private static class CommonsOrError {
+    Long id;
+    Commons commons;
+    ResponseEntity<String> error;
+
+    public CommonsOrError(Long id) {
+      this.id = id;
+    }
+  }
+
   @ApiOperation(value = "Get a list of all commons")
-  @PreAuthorize("hasRole('ROLE_USER')")
   @GetMapping("/all")
   public ResponseEntity<String> getCommons() throws JsonProcessingException {
     log.info("getCommons()...");
@@ -67,6 +76,7 @@ public class CommonsController extends ApiController {
     String body = mapper.writeValueAsString(users);
     return ResponseEntity.ok().body(body);
   }
+
 
   @ApiOperation(value = "Get a specific commons")
   @PreAuthorize("hasRole('ROLE_USER')")
@@ -87,17 +97,32 @@ public class CommonsController extends ApiController {
       throws JsonProcessingException {
     log.info("name={}", params.getName());
     Commons c = Commons.builder()
-            .name(params.getName())
-            .cowPrice(params.getCowPrice())
-            .milkPrice(params.getMilkPrice())
-            .startingBalance(params.getStartingBalance())
-            .startDate(params.getStartDate())
-            .endDate(params.getEndDate())
-            .build();
+        .name(params.getName())
+        .cowPrice(params.getCowPrice())
+        .milkPrice(params.getMilkPrice())
+        .startingBalance(params.getStartingBalance())
+        .startDate(params.getStartDate())
+        .endDate(params.getEndDate())
+        .build();
     Commons savedCommons = commonsRepository.save(c);
     String body = mapper.writeValueAsString(savedCommons);
     log.info("body={}", body);
     return ResponseEntity.ok().body(body);
+  }
+
+  @ApiOperation(value = "Delete a commons from the table")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @DeleteMapping(value = "/delete")
+  public ResponseEntity<String> deleteCommons(@ApiParam("commonsId") @RequestParam Long commonsId) {
+    log.info("id={}", commonsId);
+
+    // check if the commons is present in the table
+    commonsRepository.findById(commonsId)
+            .orElseThrow(() -> new EntityNotFoundException(Commons.class, commonsId));
+
+    commonsRepository.deleteById(commonsId);
+
+    return ResponseEntity.ok().body(String.format("commons with id %d deleted", commonsId));
   }
 
   @ApiOperation(value = "Join a commons")
@@ -113,7 +138,8 @@ public class CommonsController extends ApiController {
 
     if (userCommonsLookup.isPresent()) {
       // user is already a member of this commons
-      Commons joinedCommons = commonsRepository.findById(commonsId).orElseThrow( ()->new EntityNotFoundException(Commons.class, commonsId));
+      Commons joinedCommons = commonsRepository.findById(commonsId)
+          .orElseThrow(() -> new EntityNotFoundException(Commons.class, commonsId));
       String body = mapper.writeValueAsString(joinedCommons);
       return ResponseEntity.ok().body(body);
     }
@@ -122,11 +148,13 @@ public class CommonsController extends ApiController {
         .commonsId(commonsId)
         .userId(userId)
         .totalWealth(0)
+        .avgCowHealth(100.0)
         .build();
 
     userCommonsRepository.save(uc);
 
-    Commons joinedCommons = commonsRepository.findById(commonsId).orElseThrow( ()->new EntityNotFoundException(Commons.class, commonsId));
+    Commons joinedCommons = commonsRepository.findById(commonsId)
+        .orElseThrow(() -> new EntityNotFoundException(Commons.class, commonsId));
     String body = mapper.writeValueAsString(joinedCommons);
     return ResponseEntity.ok().body(body);
   }
@@ -144,10 +172,15 @@ public class CommonsController extends ApiController {
     userCommonsRepository.deleteById(userCommons.getId());
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 191241d607e0512bac0696991057719d1fac1ef6
   @ApiOperation(value = "Edit a pre-existing commons")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PutMapping("")
   public ResponseEntity<String> updateCommons(
+<<<<<<< HEAD
     @RequestParam Long id,
     @RequestBody @Valid Commons incoming) throws JsonProcessingException {
       CommonsOrError coe = new CommonsOrError(id);
@@ -170,11 +203,36 @@ public class CommonsController extends ApiController {
       return ResponseEntity.ok().body(body);
   }
   
+=======
+      @RequestParam Long id,
+      @RequestBody @Valid Commons incoming) throws JsonProcessingException {
+    CommonsOrError coe = new CommonsOrError(id);
+    coe = doesCommonsExist(coe);
+    if (coe.error != null) {
+      return coe.error;
+    }
+
+    Commons oldCommon = coe.commons;
+    oldCommon.setName(incoming.getName());
+    oldCommon.setCowPrice(incoming.getCowPrice());
+    oldCommon.setMilkPrice(incoming.getMilkPrice());
+    oldCommon.setStartingBalance(incoming.getStartingBalance());
+    oldCommon.setStartDate(incoming.getStartDate());
+    oldCommon.setEndDate(incoming.getEndDate());
+
+    commonsRepository.save(oldCommon);
+
+    String body = mapper.writeValueAsString(oldCommon);
+    return ResponseEntity.ok().body(body);
+  }
+
+>>>>>>> 191241d607e0512bac0696991057719d1fac1ef6
   public CommonsOrError doesCommonsExist(CommonsOrError coe) {
 
     Optional<Commons> optionalCommons = commonsRepository.findById(coe.id);
 
     if (optionalCommons.isEmpty()) {
+<<<<<<< HEAD
         coe.error = ResponseEntity
                 .badRequest()
                 .body(String.format("Commons with id %d not found", coe.id));
@@ -183,4 +241,14 @@ public class CommonsController extends ApiController {
     }
     return coe;
 }
+=======
+      coe.error = ResponseEntity
+          .badRequest()
+          .body(String.format("Commons with id %d not found", coe.id));
+    } else {
+      coe.commons = optionalCommons.get();
+    }
+    return coe;
+  }
+>>>>>>> 191241d607e0512bac0696991057719d1fac1ef6
 }
