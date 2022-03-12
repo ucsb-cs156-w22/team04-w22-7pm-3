@@ -11,7 +11,7 @@ const Profits = ({userCommons}) => {
     const { data: profitsData, error: profitsError, status: profitsStatus } =
     useBackend(
       // Stryker disable next-line all : don't test internal caching of React Query
-      [`/api/profits/all/commons?userCommonsId=1`],
+      [`/api/profits/all/commons?userCommonsId=${userCommons}`],
       { method: "GET", url: `/api/profits/all/commons/`,
           params: {
               userCommonsId: userCommons?.id
