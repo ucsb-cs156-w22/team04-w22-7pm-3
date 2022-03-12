@@ -27,7 +27,11 @@ public class UserCommons {
   private long userId;  
 
   private int totalWealth;
+<<<<<<< HEAD
   private double avgCowHealth;
+=======
+  private int numOfCows;
+>>>>>>> 9a4d663 (Updated frontend to display totalPlayer, numCows, totalWealth, start&end date)
 
 }
 
