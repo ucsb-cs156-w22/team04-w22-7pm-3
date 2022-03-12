@@ -272,9 +272,11 @@ public class CommonsControllerTests extends ControllerTestCase {
   public void joinCommonsTest() throws Exception {
 
     Commons c = Commons.builder()
-        .id(2L)
-        .name("Example Commons")
-        .build();
+      .id(2L)
+      .name("Example Commons")
+      .cowPrice(0)
+      .build();
+
 
     UserCommons uc = UserCommons.builder()
         .userId(1L)
