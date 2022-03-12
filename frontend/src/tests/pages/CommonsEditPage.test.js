@@ -80,12 +80,12 @@ describe("CommonsEditPage tests", () => {
             });
             axiosMock.onPut('/api/commons').reply(200, {
                 id: 17,
-                name: "Anika's Commons",
-                startDate: '2022-05-12',
+                name: "Simon's Commons",
+                startDate: '2022-06-12',
                 //endDate: "6/11/2021",
-                startingBalance: 1000,
-                milkPrice: 10,
-                cowPrice: 20,
+                startingBalance: 2000,
+                milkPrice: 20,
+                cowPrice: 200,
             });
         });
 
@@ -159,8 +159,8 @@ describe("CommonsEditPage tests", () => {
 
             expect(submitButton).toBeInTheDocument();
 
-            fireEvent.change(nameField, { target: { value: "Simon Yu" } })
-            fireEvent.change(balanceField, { target: { value: 1001 } })
+            fireEvent.change(nameField, { target: { value: "Simon's Commons" } })
+            fireEvent.change(balanceField, { target: { value: 2000 } })
             fireEvent.change(cowPriceField, { target: { value: 200 } })
             fireEvent.change(milkPriceField, { target: { value: 20 } })
             fireEvent.change(startDateField, { target: { value: '2022-06-12' } })
@@ -168,16 +168,16 @@ describe("CommonsEditPage tests", () => {
             fireEvent.click(submitButton);
 
             await waitFor(() => expect(mockToast).toBeCalled);
-            expect(mockToast).toBeCalledWith("Common Updated - id: 17 name: Simon Yu");
+            expect(mockToast).toBeCalledWith("Common Updated - id: 17 name: Simon's Commons");
             expect(mockNavigate).toBeCalledWith({ "to": "/admin/listcommons" });
 
             expect(axiosMock.history.put.length).toBe(1); // times called
             expect(axiosMock.history.put[0].params).toEqual({ id: 17 });
             expect(axiosMock.history.put[0].data).toBe(JSON.stringify({
                 milkPrice: 20,
-                name: "Simon Yu",
+                name: "Simon's Commons",
                 cowPrice: 200,
-                startingBalance: 1001,
+                startingBalance: 2000,
                 startDate: '2022-06-12T00:00:00.000Z',              
             })); // posted object
 
