@@ -35,12 +35,14 @@ describe("PlayPage tests", () => {
         });
         axiosMock.onGet("/api/commons", { params: { id: 1 } }).reply(200, {
             id: 1,
-            name: "Sample Commons"
+            name: "Sample Commons",
+            cowPrice: 0
         });
         axiosMock.onGet("/api/commons/all").reply(200, [
             {
                 id: 1,
-                name: "Sample Commons"
+                name: "Sample Commons",
+                cowPrice: 0
             }
         ]);
     });

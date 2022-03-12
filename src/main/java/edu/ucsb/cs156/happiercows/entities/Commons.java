@@ -23,6 +23,7 @@ public class Commons {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;  
   private String name;
+  private int day;
   private double cowPrice;
   private double milkPrice;
   private double startingBalance;
