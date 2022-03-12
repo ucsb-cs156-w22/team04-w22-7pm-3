@@ -120,7 +120,7 @@ public class CommonsControllerTests extends ControllerTestCase {
     String newTestName = "New TestCommons";
     double newTestCowPrice = 10;
     double newTestMilkPrice = 5;
-    double newTestStartingBalance = 50;
+    double newTestStartingBalance = 51;
     Date newTestStartDate = new Date(1646687906L);
     Date newTestEndDate = new Date(1846687906L);
 
