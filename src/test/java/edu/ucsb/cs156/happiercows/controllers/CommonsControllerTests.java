@@ -187,6 +187,7 @@ public class CommonsControllerTests extends ControllerTestCase {
     Commons c = Commons.builder()
       .id(2L)
       .name("Example Commons")
+      .cowPrice(0)
       .build();
 
     UserCommons uc = UserCommons.builder()

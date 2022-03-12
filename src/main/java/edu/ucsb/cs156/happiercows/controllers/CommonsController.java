@@ -46,6 +46,7 @@ public class CommonsController extends ApiController {
   ObjectMapper mapper;
 
   @ApiOperation(value = "Get a list of all commons")
+
   @GetMapping("/all")
   public ResponseEntity<String> getCommons() throws JsonProcessingException {
     log.info("getCommons()...");
@@ -73,6 +74,7 @@ public class CommonsController extends ApiController {
   public ResponseEntity<String> createCommons(@ApiParam("name of commons") @RequestBody CreateCommonsParams params)
       throws JsonProcessingException {
     log.info("name={}", params.getName());
+    log.info("cowPrice={}", params.getCowPrice());
     Commons c = Commons.builder()
             .name(params.getName())
             .cowPrice(params.getCowPrice())
