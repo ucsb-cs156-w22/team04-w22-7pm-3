@@ -14,6 +14,7 @@ describe(CreateCommonsForm, () => {
     expect(await screen.findByText(/cow price is required/i)).toBeInTheDocument();
     expect(await screen.findByText(/milk price is required/i)).toBeInTheDocument();
     expect(await screen.findByText(/start date is required/i)).toBeInTheDocument();
+    expect(await screen.findByText(/end date is required/i)).toBeInTheDocument();
 
     expect(onSubmit).not.toBeCalled();
   });
@@ -27,6 +28,7 @@ describe(CreateCommonsForm, () => {
     userEvent.type(screen.getByLabelText(/cow price/i), "99.95");
     userEvent.type(screen.getByLabelText(/milk price/i), "5.99");
     userEvent.type(screen.getByLabelText(/start date/i), "2021-01-01");
+    userEvent.type(screen.getByLabelText(/end date/i), "2021-01-03");
     userEvent.click(screen.getByRole("button"));
 
     await waitFor(() => expect(onSubmit).toBeCalledTimes(1));
