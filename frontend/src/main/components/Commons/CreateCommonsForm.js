@@ -97,7 +97,7 @@ export default function CreateCommonsForm(props) {
       </Form.Group>
 
       <Form.Group className="mb-3">
-        <Form.Label htmlFor="startDate">End Date</Form.Label>
+        <Form.Label htmlFor="endDate">End Date</Form.Label>
         <Form.Control
           id="endDate"
           type="date"
@@ -110,7 +110,7 @@ export default function CreateCommonsForm(props) {
           })}
         />
         <Form.Control.Feedback type="invalid">
-          {errors.startDate?.message}
+          {errors.endDate?.message}
         </Form.Control.Feedback>
       </Form.Group>
       <Button type="submit" data-testid="CreateCommonsForm-Create-Button">Create</Button>

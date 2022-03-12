@@ -38,6 +38,7 @@ describe(CreateCommonsForm, () => {
       cowPrice: 99.95,
       milkPrice: 5.99,
       startDate: new Date("2021-01-01"),
+      endDate: new Date("2021-01-03"),
     });
   });
 });
