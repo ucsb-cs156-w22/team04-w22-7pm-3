@@ -8,7 +8,9 @@ import { Container, CardGroup } from "react-bootstrap";
 import ManageCows from "main/components/Commons/ManageCows";
 import FarmStats from "main/components/Commons/FarmStats";
 import Profits from "main/components/Commons/Profits";
-import { useBackend } from "main/utils/useBackend";
+import { useBackend, useBackendMutation } from "main/utils/useBackend";
+
+import { onDecrementSuccess, onIncrementSuccess } from "main/utils/playPageUtils";
 
 export default function PlayPage() {
 
@@ -25,7 +27,7 @@ export default function PlayPage() {
         params: {
           commonsId: commonsId
         }
-      }
+      },
     );
 
   const { data: commons, error: commonsError, status: commonsStatus } =
@@ -41,14 +43,48 @@ export default function PlayPage() {
       }
     );
 
- 
+  const cellToAxiosParamsDecrement = () => ({
+      url: "/api/usercommons/forcurrentuser/decrementCows",
+      method: "PUT",
+      params: {
+        commonsId: userCommons.commonsId
+      }
+  });
+
+  const cellToAxiosParamsIncrement = () => ({
+    url: "/api/usercommons/forcurrentuser/incrementCows",
+    method: "PUT",
+    params: {
+      commonsId: userCommons.commonsId
+    }
+  });
+
+  const buyMutation = useBackendMutation(
+    cellToAxiosParamsIncrement,
+    { onIncrementSuccess },
+    [`/api/usercommons/forcurrentuser/decrementCows?commonsId=${commonsId}`]
+  )
+
+  
+  const sellMutation = useBackendMutation(
+    cellToAxiosParamsDecrement,
+    { onDecrementSuccess },
+    // Stryker disable next-line all : hard to set up test for caching
+    [`/api/usercommons/forcurrentuser/decrementCows?commonsId=${commonsId}`]
+);
+
   const onBuy = (userCommons) => { 
     console.log("onBuy called:", userCommons); 
+    buyMutation.mutate(userCommons);
   };
-  
+
+
   const onSell = (userCommons) => { 
     console.log("onSell called:", userCommons);
+    sellMutation.mutate(userCommons);
+  
   };
+
 
   return (
     
