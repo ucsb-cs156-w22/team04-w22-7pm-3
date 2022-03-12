@@ -46,6 +46,7 @@ public class CommonsController extends ApiController {
   ObjectMapper mapper;
 
   @ApiOperation(value = "Get a list of all commons")
+
   @GetMapping("/all")
   public ResponseEntity<String> getCommons() throws JsonProcessingException {
     log.info("getCommons()...");
@@ -73,6 +74,7 @@ public class CommonsController extends ApiController {
   public ResponseEntity<String> createCommons(@ApiParam("name of commons") @RequestBody CreateCommonsParams params)
       throws JsonProcessingException {
     log.info("name={}", params.getName());
+    log.info("cowPrice={}", params.getCowPrice());
     Commons c = Commons.builder()
             .name(params.getName())
             .cowPrice(params.getCowPrice())
@@ -85,6 +87,21 @@ public class CommonsController extends ApiController {
     String body = mapper.writeValueAsString(savedCommons);
     log.info("body={}", body);
     return ResponseEntity.ok().body(body);
+  }
+
+  @ApiOperation(value = "Delete a commons from the table")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @DeleteMapping(value = "/delete")
+  public ResponseEntity<String> deleteCommons(@ApiParam("commonsId") @RequestParam Long commonsId) {
+    log.info("id={}", commonsId);
+
+    // check if the commons is present in the table
+    commonsRepository.findById(commonsId)
+            .orElseThrow(() -> new EntityNotFoundException(Commons.class, commonsId));
+
+    commonsRepository.deleteById(commonsId);
+
+    return ResponseEntity.ok().body(String.format("commons with id %d deleted", commonsId));
   }
 
   @ApiOperation(value = "Join a commons")
@@ -109,6 +126,7 @@ public class CommonsController extends ApiController {
         .commonsId(commonsId)
         .userId(userId)
         .totalWealth(0)
+        .avgCowHealth(100.0)
         .build();
 
     userCommonsRepository.save(uc);
