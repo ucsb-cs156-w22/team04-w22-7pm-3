@@ -89,6 +89,7 @@ public class CommonsController extends ApiController {
       throws JsonProcessingException {
     log.info("name={}", params.getName());
     log.info("cowPrice={}", params.getCowPrice());
+    log.info("milkPrice={}", params.getMilkPrice());
     Commons c = Commons.builder()
         .name(params.getName())
         .cowPrice(params.getCowPrice())

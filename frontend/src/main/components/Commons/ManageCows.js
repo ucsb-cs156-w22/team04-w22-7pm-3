@@ -12,6 +12,7 @@ const ManageCows = ({userCommons, commons, onBuy, onSell}) =>  {
             {/* change $10 to info from fixture */}
             <Card.Title>Market Cow Price: ${commons?.cowPrice}</Card.Title> 
             <Card.Title>Selling Price : ${parseInt(commons?.cowPrice * 0.8, 10)}</Card.Title>
+            <Card.Title>Milk Price : ${commons?.milkPrice}</Card.Title>
             {/*The selling price should be updated when fixtures are set up. S_P = M_P * 0.8 * avgCowHealth /100 */}
                 <Row>
                     <Col>
