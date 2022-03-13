@@ -278,6 +278,7 @@ public class CommonsControllerTests extends ControllerTestCase {
       .milkPrice(0)
       .build();
 
+
     UserCommons uc = UserCommons.builder()
         .userId(1L)
         .commonsId(2L)
