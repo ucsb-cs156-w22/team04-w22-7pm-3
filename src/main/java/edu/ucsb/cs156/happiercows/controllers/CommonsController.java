@@ -58,15 +58,6 @@ public class CommonsController extends ApiController {
   @Autowired
   ObjectMapper mapper;
 
-  private static class CommonsOrError {
-    Long id;
-    Commons commons;
-    ResponseEntity<String> error;
-
-    public CommonsOrError(Long id) {
-      this.id = id;
-    }
-  }
 
   @ApiOperation(value = "Get a list of all commons")
 
