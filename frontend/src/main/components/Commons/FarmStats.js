@@ -23,6 +23,9 @@ const FarmStats = ({userCommons}) => {
             <Card.Text>
                 Cow Health: {userCommons?.avgCowHealth}%
             </Card.Text>
+            <Card.Text>
+                Number of Cows: {userCommons?.numOfCows}
+            </Card.Text>
         </Card.Body>
         </Card>
     ); 

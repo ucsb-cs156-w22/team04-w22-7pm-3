@@ -275,6 +275,7 @@ public class CommonsControllerTests extends ControllerTestCase {
       .id(2L)
       .name("Example Commons")
       .cowPrice(0)
+      .milkPrice(0)
       .build();
 
 

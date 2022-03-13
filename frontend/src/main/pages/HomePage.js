@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
 import CommonsList from "main/components/Commons/CommonsList";
 import { Container, Row, Col } from "react-bootstrap";
-import { useCurrentUser } from "main/utils/currentUser";
+import { hasRole, useCurrentUser } from "main/utils/currentUser";
 import { useNavigate } from "react-router-dom";
 import Background from './../../assets/HomePageBackground.jpg';
 
@@ -60,17 +60,28 @@ export default function HomePage() {
   let navigate = useNavigate();
   const visitButtonClick = (id) => { navigate("/play/" + id) };
 
-  return (
-    <div style={{ backgroundSize: 'cover', backgroundImage: `url(${Background})` }}>
-      <BasicLayout>
-        <h1 data-testid="homePage-title" style={{ fontSize: "75px", borderRadius: "7px", backgroundColor: "white", opacity: ".9" }} className="text-center border-0 my-3">Howdy Farmer</h1>
-        <Container>
-          <Row>
-            <Col sm><CommonsList commonList={commonsJoined} buttonText={"Visit"} buttonLink={visitButtonClick} /></Col>
-            <Col sm><CommonsList commonList={commons} buttonText={"Join"} buttonLink={mutation.mutate} /></Col>
-          </Row>
-        </Container>
-      </BasicLayout>
-    </div>
-  )
+  if(hasRole(currentUser, "ROLE_USER") || hasRole(currentUser, "ROLE_ADMIN")){
+    return (
+      <div style={{ backgroundSize: 'cover', backgroundImage: `url(${Background})` }}>
+        <BasicLayout>
+          <h1 data-testid="homePage-title" style={{ fontSize: "75px", borderRadius: "7px", backgroundColor: "white", opacity: ".9" }} className="text-center border-0 my-3">Howdy Farmer</h1>
+          <Container>
+            <Row>
+              <Col sm><CommonsList commonList={commonsJoined} buttonText={"Visit"} buttonLink={visitButtonClick} /></Col>
+              <Col sm><CommonsList commonList={commons} buttonText={"Join"} buttonLink={mutation.mutate} /></Col>
+            </Row>
+          </Container>
+        </BasicLayout>
+      </div>
+    )
+  }else{
+    return (
+      <div style={{ backgroundSize: 'cover', backgroundImage: `url(${Background})` }}>
+        <BasicLayout>
+          <h1 data-testid="homePage-title" style={{ fontSize: "75px", borderRadius: "7px", backgroundColor: "white", opacity: ".9" }} className="text-center border-0 my-3">Howdy Farmer</h1>
+          <h1 style={{ fontSize: "40px", borderRadius: "7px", backgroundColor: "white", opacity: ".9" }} className="text-center border-0 my-3">Log in to participate in Happier Cows!</h1>
+        </BasicLayout>
+      </div>
+    )
+  }
 }

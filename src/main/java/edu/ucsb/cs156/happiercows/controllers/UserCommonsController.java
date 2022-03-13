@@ -56,5 +56,4 @@ public class UserCommonsController extends ApiController {
             () -> new EntityNotFoundException(UserCommons.class, "commonsId", commonsId, "userId", userId));
     return userCommons;
   }
-
 }
