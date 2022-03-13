@@ -38,7 +38,7 @@ describe(CreateCommonsForm, () => {
     userEvent.type(screen.getByLabelText(/milk price/i), "0");
     userEvent.type(screen.getByLabelText(/start date/i), "2021-13-01");
     userEvent.type(screen.getByLabelText(/end date/i), "2021-13-01");
-    userEvent.click(screen.getByRole("button"));
+    userEvent.click(screen.getByTestId("CreateCommonsForm-submit"));
 
     //expect(await screen.findByText(/commons name is required/i)).toBeInTheDocument();
     expect(await screen.findByText(/Starting Balance must be positive/i)).toBeInTheDocument();

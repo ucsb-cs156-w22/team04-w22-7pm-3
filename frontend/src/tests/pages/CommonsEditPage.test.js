@@ -100,7 +100,7 @@ describe("CommonsEditPage tests", () => {
 
         test("Is populated with the data provided", async () => {
 
-            const { getByTestId } = render(
+            const { getByTestId, getByLabelText } = render(
                 <QueryClientProvider client={queryClient}>
                     <MemoryRouter>
                         <CommonsEditPage />
@@ -129,7 +129,7 @@ describe("CommonsEditPage tests", () => {
 
         test("Changes when you click Update", async () => {
 
-            const { getByTestId } = render(
+            const { getByTestId, getByLabelText } = render(
                 <QueryClientProvider client={queryClient}>
                     <MemoryRouter>
                         <CommonsEditPage />
@@ -145,6 +145,7 @@ describe("CommonsEditPage tests", () => {
             const cowPriceField = getByTestId("CreateCommonsForm-cowprice");
             const milkPriceField = getByTestId("CreateCommonsForm-milkprice");
             const startDateField = getByTestId("CreateCommonsForm-startdate");
+            const endDateField = getByLabelText("End Date");
 
             expect(idField).toHaveValue("17");
             expect(nameField).toHaveValue("Anika's Commons");
@@ -162,11 +163,13 @@ describe("CommonsEditPage tests", () => {
             fireEvent.change(cowPriceField, { target: { value: 200 } })
             fireEvent.change(milkPriceField, { target: { value: 20 } })
             fireEvent.change(startDateField, { target: { value: '2022-06-12' } })
-            
+            fireEvent.change(endDateField, { target: { value: '2022-08-12' } })
+
             fireEvent.click(submitButton);
 
-            await waitFor(() => expect(mockToast).toBeCalled);
-            expect(mockToast).toBeCalledWith("Common Updated - id: 17 name: Simon's Commons");
+            await waitFor(() => { expect(mockToast).toBeCalledWith("Common Updated - id: 17 name: Simon's Commons"); });
+
+            //expect(mockToast).toBeCalledWith("Common Updated - id: 17 name: Simon's Commons");
             expect(mockNavigate).toBeCalledWith({ "to": "/admin/listcommons" });
 
             expect(axiosMock.history.put.length).toBe(1); // times called
@@ -176,7 +179,7 @@ describe("CommonsEditPage tests", () => {
                 name: "Simon's Commons",
                 cowPrice: 200,
                 startingBalance: 2000,
-                startDate: '2022-06-12T00:00:00.000Z',              
+                startDate: '2022-06-12T00:00:00.000Z',  
             })); // posted object
 
         });

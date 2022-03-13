@@ -143,7 +143,6 @@ export default function CreateCommonsForm({initialCommon, submitAction, buttonLa
         </Form.Control.Feedback>
       </Form.Group>
 
-    //  <Button type="submit" data-testid="CreateCommonsForm-Create-Button">Create</Button>
 
       <Button type="submit" data-testid="CreateCommonsForm-submit">
         {buttonLabel}
