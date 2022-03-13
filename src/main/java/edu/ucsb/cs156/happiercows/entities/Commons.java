@@ -29,6 +29,7 @@ public class Commons {
   private double startingBalance;
   private Date startDate;
   private Date endDate;
+  private int totalPlayers;
 
   @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
   @JoinTable(name = "user_commons", 
