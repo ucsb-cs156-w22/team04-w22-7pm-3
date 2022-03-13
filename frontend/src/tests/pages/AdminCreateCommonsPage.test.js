@@ -75,7 +75,6 @@ describe("AdminCreateCommonsPage tests", () => {
         const milkPriceField = getByLabelText("Milk Price");
         const startDateField = getByLabelText("Start Date");
         const endDateField = getByLabelText("End Date");
-        const button = getByTestId("CreateCommonsForm-Create-Button");
         const button = getByTestId("CreateCommonsForm-submit");
 
 
@@ -95,7 +94,6 @@ describe("AdminCreateCommonsPage tests", () => {
             startingBalance: 500,
             cowPrice: 10,
             milkPrice: 5,
-            startDate: '2022-05-12T00:00:00.000Z',
             endDate: '2022-05-15T00:00:00.000Z'
         };
 

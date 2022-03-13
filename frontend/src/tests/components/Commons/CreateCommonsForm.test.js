@@ -40,7 +40,6 @@ describe(CreateCommonsForm, () => {
     userEvent.type(screen.getByLabelText(/milk price/i), "5.99");
     userEvent.type(screen.getByLabelText(/start date/i), "2021-01-01");
     userEvent.type(screen.getByLabelText(/end date/i), "2021-01-03");
-    userEvent.click(screen.getByRole("button"));
     userEvent.click(screen.getByTestId("CreateCommonsForm-submit"));
 
     await waitFor(() => expect(onSubmit).toBeCalledTimes(1));

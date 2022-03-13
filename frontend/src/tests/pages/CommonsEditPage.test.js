@@ -116,8 +116,6 @@ describe("CommonsEditPage tests", () => {
             const cowPriceField = getByTestId("CreateCommonsForm-cowprice");
             const milkPriceField = getByTestId("CreateCommonsForm-milkprice");
             const startDateField = getByTestId("CreateCommonsForm-startdate");
-            
-            const submitButton = getByTestId("CreateCommonsForm-submit");
 
             expect(idField).toHaveValue("17");
             expect(nameField).toHaveValue("Anika's Commons");
