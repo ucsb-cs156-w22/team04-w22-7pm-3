@@ -26,7 +26,7 @@ function App() {
             hasRole(currentUser, "ROLE_ADMIN") && <Route path="/admin/createcommons" element={<AdminCreateCommonsPage />} />
           }
           {
-            hasRole(currentUser, "ROLE_ADMIN") && <Route path="/admin/edit/:id" element={<CommonsEditPage />} />
+            hasRole(currentUser, "ROLE_ADMIN") && <Route path="/admin/commons/edit/:id" element={<CommonsEditPage />} />
           }
           {
             hasRole(currentUser, "ROLE_ADMIN") && <Route path="/admin/listcommons" element={<CommonsTableListPage />} />

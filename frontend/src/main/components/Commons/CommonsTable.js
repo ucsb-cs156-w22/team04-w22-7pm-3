@@ -1,9 +1,15 @@
 import React from "react";
-import OurTable from "main/components/OurTable";
+import OurTable, { ButtonColumn } from "main/components/OurTable";
+import { useNavigate } from "react-router-dom";
 
 export default function CommonsTable({ commons, currentUser }) {
     
     // Stryker disable ArrayDeclaration : [columns] and [students] are performance optimization; mutation preserves correctness
+    const navigate = useNavigate();
+    const editCallback = (cell) => {
+        navigate(`/admin/commons/edit/${cell.row.values.id}`)
+    }
+
     const memoizedColumns = React.useMemo(() => 
         [
             {
@@ -33,6 +39,9 @@ export default function CommonsTable({ commons, currentUser }) {
             
         ], 
     );
+
+    memoizedColumns.push(ButtonColumn("Edit", "primary", editCallback, "CommonsTable"));
+    
     const memoizedDates = React.useMemo(() => commons);
     // Stryker enable ArrayDeclaration
 

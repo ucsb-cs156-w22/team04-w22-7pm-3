@@ -6,6 +6,12 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
 import { currentUserFixtures } from "fixtures/currentUserFixtures";
 
+const mockedNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockedNavigate
+}));
 
 describe("CommonsTable tests", () => {
   const queryClient = new QueryClient();
@@ -85,6 +91,32 @@ describe("CommonsTable tests", () => {
     expect(getByTestId(`${testId}-cell-row-2-col-name`)).toHaveTextContent("Vicky's Commons");
 
   });
+
+  test("Edit button navigates to the edit page for admin user", async () => {
+    const testId = "CommonsTable";
+
+    const currentUser = currentUserFixtures.adminUser;
+
+    const { getByText, getByTestId } = render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <CommonsTable commons={commonsFixtures.threeCommons} currentUser={currentUser} />
+        </MemoryRouter>
+      </QueryClientProvider>
+
+    );
+
+    await waitFor(() => { expect(getByTestId(`${testId}-cell-row-0-col-id`)).toHaveTextContent(5); });
+
+    const editButton = getByTestId(`${testId}-cell-row-0-col-Edit-button`);
+    expect(editButton).toBeInTheDocument();
+    
+    fireEvent.click(editButton);
+
+    await waitFor(() => expect(mockedNavigate).toHaveBeenCalledWith('/admin/commons/edit/5'));
+
+  });
+
   
 });
 
