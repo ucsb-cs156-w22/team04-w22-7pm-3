@@ -10,8 +10,8 @@ const profitsFixtures = {
         "totalWealth": 0,
         "avgCowHealth": 100
       },
-      "profit": 44,
-      "time": "2001-10-10T01:01:01"
+      "profit": 10,
+      "time": "2002-10-10T01:01:01"
     },
     {
       "id": 3,
@@ -22,8 +22,8 @@ const profitsFixtures = {
         "totalWealth": 0,
         "avgCowHealth": 100
       },
-      "profit": 44,
-      "time": "2001-10-10T01:01:01"
+      "profit": 20,
+      "time": "2003-10-10T01:01:01"
     },
     {
       "id": 4,
@@ -34,8 +34,8 @@ const profitsFixtures = {
         "totalWealth": 0,
         "avgCowHealth": 100
       },
-      "profit": 44,
-      "time": "2001-10-10T01:01:01"
+      "profit": 40,
+      "time": "2004-10-10T01:01:01"
     }
   ]
 }
