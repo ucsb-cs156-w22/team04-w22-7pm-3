@@ -73,6 +73,7 @@ describe("CommonsEditPage tests", () => {
                 id: 17,
                 name: "Anika's Commons",
                 startDate: '2022-05-12',
+                endDate: '2022-05-15',
                 startingBalance: 1000,
                 milkPrice: 10,
                 cowPrice: 15,
@@ -81,6 +82,7 @@ describe("CommonsEditPage tests", () => {
                 id: 17,
                 name: "Simon's Commons",
                 startDate: '2022-06-12',
+                endDate: '2022-06-15',
                 startingBalance: 2000,
                 milkPrice: 20,
                 cowPrice: 200,
@@ -116,6 +118,7 @@ describe("CommonsEditPage tests", () => {
             const cowPriceField = getByTestId("CreateCommonsForm-cowprice");
             const milkPriceField = getByTestId("CreateCommonsForm-milkprice");
             const startDateField = getByTestId("CreateCommonsForm-startdate");
+            const endDateField = getByTestId("CreateCommonsForm-enddate");
 
             expect(idField).toHaveValue("17");
             expect(nameField).toHaveValue("Anika's Commons");
@@ -123,6 +126,7 @@ describe("CommonsEditPage tests", () => {
             expect(cowPriceField).toHaveValue(15);
             expect(milkPriceField).toHaveValue(10);
             expect(startDateField).toHaveValue('2022-05-12');
+            expect(endDateField).toHaveValue('2022-05-15');
         });
 
         test("Changes when you click Update", async () => {
@@ -143,6 +147,7 @@ describe("CommonsEditPage tests", () => {
             const cowPriceField = getByTestId("CreateCommonsForm-cowprice");
             const milkPriceField = getByTestId("CreateCommonsForm-milkprice");
             const startDateField = getByTestId("CreateCommonsForm-startdate");
+            const endDateField = getByTestId("CreateCommonsForm-enddate");
 
             expect(idField).toHaveValue("17");
             expect(nameField).toHaveValue("Anika's Commons");
@@ -150,6 +155,7 @@ describe("CommonsEditPage tests", () => {
             expect(cowPriceField).toHaveValue(15);
             expect(milkPriceField).toHaveValue(10);
             expect(startDateField).toHaveValue('2022-05-12');
+            expect(endDateField).toHaveValue('2022-05-15');
 
             const submitButton = getByTestId("CreateCommonsForm-submit");
 
@@ -160,6 +166,7 @@ describe("CommonsEditPage tests", () => {
             fireEvent.change(cowPriceField, { target: { value: 200 } })
             fireEvent.change(milkPriceField, { target: { value: 20 } })
             fireEvent.change(startDateField, { target: { value: '2022-06-12' } })
+            fireEvent.change(endDateField, { target: { value: '2022-06-15' } })
             
             fireEvent.click(submitButton);
 
@@ -174,7 +181,8 @@ describe("CommonsEditPage tests", () => {
                 name: "Simon's Commons",
                 cowPrice: 200,
                 startingBalance: 2000,
-                startDate: '2022-06-12T00:00:00.000Z',              
+                startDate: '2022-06-12T00:00:00.000Z',   
+                endDate: '2022-06-15T00:00:00.000Z',            
             })); // posted object
 
         });

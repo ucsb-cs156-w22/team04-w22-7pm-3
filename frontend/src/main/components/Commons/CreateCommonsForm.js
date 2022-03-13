@@ -127,6 +127,7 @@ export default function CreateCommonsForm({initialCommon, submitAction, buttonLa
       <Form.Group className="mb-3">
         <Form.Label htmlFor="endDate">End Date</Form.Label>
         <Form.Control
+        data-testid="CreateCommonsForm-enddate"
           id="endDate"
           type="date"
           isInvalid={!!errors.endDate}
