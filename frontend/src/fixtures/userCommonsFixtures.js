@@ -11,7 +11,7 @@ const userCommonsFixtures = {
                 "name":"Anika's cows",
                 "day": 5,
                 "startDate": "2022-03-05T15:50:10",
-                "endDate": "2023-03-05T15:50:10",
+                "endDate": "2023-03-10T15:50:10",
                 "totalPlayers": 50,
                 "cowPrice": 15,
                 "milkPrice": 10,

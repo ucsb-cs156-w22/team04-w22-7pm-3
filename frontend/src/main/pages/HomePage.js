@@ -80,6 +80,8 @@ export default function HomePage() {
         <BasicLayout>
           <h1 data-testid="homePage-title" style={{ fontSize: "75px", borderRadius: "7px", backgroundColor: "white", opacity: ".9" }} className="text-center border-0 my-3">Howdy Farmer</h1>
           <h1 style={{ fontSize: "40px", borderRadius: "7px", backgroundColor: "white", opacity: ".9" }} className="text-center border-0 my-3">Log in to participate in Happier Cows!</h1>
+          <h1 style={{ fontSize: "20px", borderRadius: "7px", backgroundColor: "white", opacity: ".9" }} className="text-center border-0 my-3">W22-7pm-3: Xiyue Wang, Chase Alcorn, Issac Chin, Thomas Hale, Steven Choi, Michael Glushchenko</h1>
+          <h1 style={{ fontSize: "20px", borderRadius: "7px", backgroundColor: "white", opacity: ".9" }} className="text-center border-0 my-3">W22-7pm-4: Allison Huang, Elizabeth Armstrong, Olivia Gillam, Ryan Wenger, Simon Yu, Vicky Zhou</h1>
         </BasicLayout>
       </div>
     )
