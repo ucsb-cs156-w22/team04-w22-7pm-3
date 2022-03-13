@@ -64,13 +64,13 @@ public class CommonsControllerTests extends ControllerTestCase {
     Date testStartDate = new Date(1646687907L);
     Date testEndDate = new Date(1846687907L);
     Commons expectedCommons = Commons.builder()
-            .name(testName)
-            .cowPrice(testCowPrice)
-            .milkPrice(testMilkPrice)
-            .startingBalance(testStartingBalance)
-            .startDate(testStartDate)
-            .endDate(testEndDate)
-            .build();
+        .name(testName)
+        .cowPrice(testCowPrice)
+        .milkPrice(testMilkPrice)
+        .startingBalance(testStartingBalance)
+        .startDate(testStartDate)
+        .endDate(testEndDate)
+        .build();
     ObjectMapper mapper = new ObjectMapper();
     String requestBody = mapper.writeValueAsString(expectedCommons);
     when(commonsRepository.save(any())).thenReturn(expectedCommons);
@@ -89,7 +89,11 @@ public class CommonsControllerTests extends ControllerTestCase {
             .toUriString();
 
     MvcResult response = mockMvc
-        .perform(post(URI).with(csrf()).contentType(MediaType.APPLICATION_JSON)
+        .perform(post(
+            String.format(
+                "/api/commons/new?name=%s?cowPrice=%f?milkPrice=%f?startingBalance=%f?startDate=%s?endDate=%s",
+                testName, testCowPrice, testMilkPrice, testStartingBalance, testStartDate, testEndDate))
+            .with(csrf()).contentType(MediaType.APPLICATION_JSON)
             .characterEncoding("utf-8").content(requestBody))
         .andExpect(status().isOk()).andReturn();
 
@@ -180,6 +184,89 @@ public class CommonsControllerTests extends ControllerTestCase {
     assertEquals(actualCommons, expectedCommons);
   }
 
+  @WithMockUser(roles = { "ADMIN" })
+  @Test
+  public void editCommonsTest() throws Exception {
+    String testName = "TestCommons";
+    double testCowPrice = 10.4;
+    double testMilkPrice = 5.6;
+    double testStartingBalance = 50.0;
+    Date testStartDate = new Date(1646687907L);
+    Date testEndDate = new Date(1846687907L);
+
+    String newTestName = "New TestCommons";
+    double newTestCowPrice = 10;
+    double newTestMilkPrice = 5;
+    double newTestStartingBalance = 51;
+    Date newTestStartDate = new Date(1646687906L);
+    Date newTestEndDate = new Date(1846687906L);
+
+    Commons commonsOrig = Commons.builder()
+        .name(testName)
+        .cowPrice(testCowPrice)
+        .milkPrice(testMilkPrice)
+        .startingBalance(testStartingBalance)
+        .startDate(testStartDate)
+        .endDate(testEndDate)
+        .build();
+
+    Commons commonsEdited = Commons.builder()
+        .name(newTestName)
+        .cowPrice(newTestCowPrice)
+        .milkPrice(newTestMilkPrice)
+        .startingBalance(newTestStartingBalance)
+        .startDate(newTestStartDate)
+        .endDate(newTestEndDate)
+        .build();
+    String requestBody = mapper.writeValueAsString(commonsEdited);
+    when(commonsRepository.findById(eq(67L))).thenReturn(Optional.of(commonsOrig));
+    MvcResult response = mockMvc.perform(
+        put("/api/commons?id=67")
+            .contentType(MediaType.APPLICATION_JSON)
+            .characterEncoding("utf-8")
+            .content(requestBody)
+            .with(csrf()))
+        .andExpect(status().isOk()).andReturn();
+    verify(commonsRepository, times(1)).findById(67L);
+    verify(commonsRepository, times(1)).save(commonsEdited); // should be saved with correct user
+    String responseString = response.getResponse().getContentAsString();
+    assertEquals(requestBody, responseString);
+
+  }
+
+  @WithMockUser(roles = { "ADMIN" })
+  @Test
+  public void editCommonsThatDoesNotExistTest() throws Exception {
+    String newTestName = "New TestCommons";
+    double newTestCowPrice = 10;
+    double newTestMilkPrice = 5;
+    double newTestStartingBalance = 50;
+    Date newTestStartDate = new Date(1646687906L);
+    Date newTestEndDate = new Date(1846687906L);
+
+    Commons commonsEdited = Commons.builder()
+        .name(newTestName)
+        .cowPrice(newTestCowPrice)
+        .milkPrice(newTestMilkPrice)
+        .startingBalance(newTestStartingBalance)
+        .startDate(newTestStartDate)
+        .endDate(newTestEndDate)
+        .build();
+    String requestBody = mapper.writeValueAsString(commonsEdited);
+    when(commonsRepository.findById(eq(67L))).thenReturn(Optional.empty());
+    MvcResult response = mockMvc.perform(
+        put("/api/commons?id=67")
+            .contentType(MediaType.APPLICATION_JSON)
+            .characterEncoding("utf-8")
+            .content(requestBody)
+            .with(csrf()))
+        .andExpect(status().isBadRequest()).andReturn();
+    verify(commonsRepository, times(1)).findById(67L);
+    String responseString = response.getResponse().getContentAsString();
+    assertEquals("Commons with id 67 not found", responseString);
+
+  }
+
   @WithMockUser(roles = { "USER" })
   @Test
   public void joinCommonsTest() throws Exception {
@@ -190,6 +277,7 @@ public class CommonsControllerTests extends ControllerTestCase {
       .cowPrice(0)
       .milkPrice(0)
       .build();
+
 
     UserCommons uc = UserCommons.builder()
         .userId(1L)
@@ -208,7 +296,7 @@ public class CommonsControllerTests extends ControllerTestCase {
 
     String requestBody = mapper.writeValueAsString(uc);
 
-    when(userCommonsRepository.findByCommonsIdAndUserId(anyLong(),anyLong())).thenReturn(Optional.empty());
+    when(userCommonsRepository.findByCommonsIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.empty());
     when(userCommonsRepository.save(eq(uc))).thenReturn(ucSaved);
     when(commonsRepository.findById(eq(2L))).thenReturn(Optional.of(c));
 

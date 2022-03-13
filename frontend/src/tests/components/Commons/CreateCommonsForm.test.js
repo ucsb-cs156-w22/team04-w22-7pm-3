@@ -1,13 +1,23 @@
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import CreateCommonsForm from "main/components/Commons/CreateCommonsForm";
+import { BrowserRouter as Router } from "react-router-dom";
+
+const mockedNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useNavigate: () => mockedNavigate
+}));
+
 
 describe(CreateCommonsForm, () => {
   it("has validation errors for required fields", async () => {
     const onSubmit = jest.fn();
-    await act(async () => render(<CreateCommonsForm onSubmit={onSubmit} />));
+    await act(async () => render(<CreateCommonsForm submitAction={onSubmit} />));
 
-    userEvent.click(screen.getByRole("button"));
+    userEvent.click(screen.getByTestId("CreateCommonsForm-submit"));
+    
 
     expect(await screen.findByText(/commons name is required/i)).toBeInTheDocument();
     expect(await screen.findByText(/starting balance is required/i)).toBeInTheDocument();
@@ -21,7 +31,8 @@ describe(CreateCommonsForm, () => {
 
   it("calls the onSubmit callback with valid inputs", async () => {
     const onSubmit = jest.fn();
-    await act(async () => render(<CreateCommonsForm onSubmit={onSubmit} />));
+    await act(async () => render(<CreateCommonsForm submitAction={onSubmit} />));
+  
 
     userEvent.type(screen.getByLabelText(/commons name/i), "Test");
     userEvent.type(screen.getByLabelText(/starting balance/i), "1000.00");
@@ -30,6 +41,7 @@ describe(CreateCommonsForm, () => {
     userEvent.type(screen.getByLabelText(/start date/i), "2021-01-01");
     userEvent.type(screen.getByLabelText(/end date/i), "2021-01-03");
     userEvent.click(screen.getByRole("button"));
+    userEvent.click(screen.getByTestId("CreateCommonsForm-submit"));
 
     await waitFor(() => expect(onSubmit).toBeCalledTimes(1));
     expect(onSubmit.mock.calls[0][0]).toMatchObject({
@@ -40,6 +52,22 @@ describe(CreateCommonsForm, () => {
       startDate: new Date("2021-01-01"),
       endDate: new Date("2021-01-03"),
     });
+  });
+
+  test("Test that navigate(-1) is called when Cancel is clicked", async () => {
+
+    const { getByTestId } = render(
+        <Router>
+            <CreateCommonsForm />
+        </Router>
+    );
+    await waitFor(() => expect(getByTestId("CreateCommonsForm-cancel")).toBeInTheDocument());
+    const cancelButton = getByTestId("CreateCommonsForm-cancel");
+
+    fireEvent.click(cancelButton);
+
+    await waitFor(() => expect(mockedNavigate).toHaveBeenCalledWith(-1));
+
   });
 });
 
