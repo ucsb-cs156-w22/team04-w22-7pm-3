@@ -82,7 +82,8 @@ describe("AdminCreateCommonsPage tests", () => {
         const milkPriceField = getByLabelText("Milk Price");
         const startDateField = getByLabelText("Start Date");
         const endDateField = getByLabelText("End Date");
-        const button = getByTestId("CreateCommonsForm-Create-Button");
+
+        const button = getByTestId("CreateCommonsForm-submit");
 
 
         fireEvent.change(commonsNameField, { target: { value: 'My New Commons' } })
@@ -97,12 +98,14 @@ describe("AdminCreateCommonsPage tests", () => {
         await waitFor(() => expect(axiosMock.history.post.length).toBe(1));
 
         const expectedCommons = {
+            startDate: '2022-05-12T00:00:00.000Z',
             name: "My New Commons",
             startingBalance: 500,
             cowPrice: 10,
             milkPrice: 5,
             startDate: '2022-05-12T00:00:00.000Z',
             endDate: '2022-06-12T00:00:00.000Z'
+
         };
 
         expect(axiosMock.history.post[0].data).toEqual( JSON.stringify(expectedCommons) );

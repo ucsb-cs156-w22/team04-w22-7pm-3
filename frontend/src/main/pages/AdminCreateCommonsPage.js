@@ -18,7 +18,6 @@ const AdminCreateCommonsPage = () => {
         method: "POST",
         data: newCommons
     });
-
     const onSuccess = (commons) => {
         toast(`Commons successfully created! - id: ${commons.id} name: ${commons.name}`);
     }
@@ -43,7 +42,7 @@ const AdminCreateCommonsPage = () => {
         <BasicLayout>
             <h2>Create Commons</h2>
             <CreateCommonsForm
-                onSubmit={onSubmit}
+                submitAction={onSubmit}
             />
         </BasicLayout>
     );

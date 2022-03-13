@@ -39,6 +39,16 @@ import javax.validation.Valid;
 @RestController
 public class CommonsController extends ApiController {
 
+  private static class CommonsOrError {
+    Long id;
+    Commons commons;
+    ResponseEntity<String> error;
+
+    public CommonsOrError(Long id) {
+        this.id = id;
+    }
+  }
+
   @Autowired
   private CommonsRepository commonsRepository;
 
@@ -48,15 +58,6 @@ public class CommonsController extends ApiController {
   @Autowired
   ObjectMapper mapper;
 
-  private static class CommonsOrError {
-    Long id;
-    Commons commons;
-    ResponseEntity<String> error;
-
-    public CommonsOrError(Long id) {
-      this.id = id;
-    }
-  }
 
   @ApiOperation(value = "Get a list of all commons")
 
@@ -164,7 +165,7 @@ public class CommonsController extends ApiController {
     userCommonsRepository.deleteById(userCommons.getId());
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
-
+  
   @ApiOperation(value = "Edit a pre-existing commons")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PutMapping("")
