@@ -13,6 +13,7 @@ import AxiosMockAdapter from "axios-mock-adapter";
 const AdminCreateCommonsPage = () => {
 
     const objectToAxiosParams = (newCommons) => ({
+        // Stryker disable next-line all : don't test internal caching of React Query
         url: "/api/commons/new",
         method: "POST",
         data: newCommons
@@ -24,7 +25,7 @@ const AdminCreateCommonsPage = () => {
     const mutation = useBackendMutation(
         objectToAxiosParams,
         { onSuccess },
-        // Stryker disable next-line all : hard to set up test for caching
+        // Stryker disable next-line all : don't test internal caching of React Query
         ["/api/commons/all"]
     );
 
