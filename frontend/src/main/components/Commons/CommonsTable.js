@@ -35,6 +35,10 @@ export default function CommonsTable({ commons, currentUser }) {
             {
                 Header: "Starting Date",
                 accessor: "startDate",
+            },
+            {
+                Header: "Ending Date",
+                accessor: "endDate",
             }
             
         ], 

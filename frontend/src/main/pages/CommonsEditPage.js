@@ -33,7 +33,8 @@ export default function CommonsEditPage() {
       name: common.name,
       cowPrice: common.cowPrice,
       startingBalance: common.startingBalance,
-      startDate: new Date(common.startDate)
+      startDate: new Date(common.startDate),
+      endDate: new Date(common.endDate)
     }
   });
 
